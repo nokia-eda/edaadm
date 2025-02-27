@@ -1,0 +1,14 @@
+# Source: docker-registry/templates/pvc.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: registry-docker-registry
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST}
+  labels:
+    app: registry-docker-registry
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "100Gi" # kpt-set: ${EDA_ASSETS_REGISTRY_PVC_SIZE}

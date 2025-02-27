@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: eda-git
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST}
+  labels:
+    app.kubernetes.io/instance: eda-git
+    app.kubernetes.io/name: eda-git
+    app.kubernetes.io/version: latest
+    eda.nokia.com/app: git
+    eda.nokia.com/app-group: control-plane
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: git.assets.local
+      http:
+        paths:
+          - path: /git(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: eda-git
+                port:
+                  name: web
+    - host: ""
+      http:
+        paths:
+          - path: /git(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: eda-git
+                port:
+                  name: web
+    - host: "user.domain"
+      http:
+        paths:
+          - path: /git(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: eda-git
+                port:
+                  name: web

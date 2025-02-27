@@ -1,0 +1,15 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: lighttpd-config
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST}
+data:
+  15-dirlisting.conf: |-
+    dir-listing.activate = "enable"
+  15-webdav.conf: |-
+    server.modules += ("mod_webdav")
+    webdav.activate = "enable"
+
+# $HTTP["url"] =~ "^/" {
+
+# }

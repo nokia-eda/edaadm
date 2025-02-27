@@ -1,0 +1,18 @@
+version: 1.0.0
+name: service-now-v1.0.0
+assets:
+  registries:
+    - name: ghcr.io
+      # tlsVerify: false
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1h6UnhjR3BQYW5KMWVWSlhhM1p6YzBOR2NVZEVOVUZsWjI5Vk4zZFhZVE40YzBOS1NnPT0=
+      images:
+        - name: nokia-eda/apps/service-now
+          format: oci
+          tags:
+            - v1.0.0
+        - name: nokia-eda/apps/service-now-controller
+          tags:
+            - v1.0.0

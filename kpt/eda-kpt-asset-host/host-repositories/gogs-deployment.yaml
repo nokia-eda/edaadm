@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eda-git
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST} # kpt-set: ${EDA_GOGS_NAMESPACE}
+  labels:
+    eda.nokia.com/app: git
+    eda.nokia.com/app-group: control-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      eda.nokia.com/app: git
+  template:
+    metadata:
+      labels:
+        eda.nokia.com/app: git
+        eda.nokia.com/app-group: control-plane
+    spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: eda.nokia.com/app-group
+                      operator: In
+                      values:
+                        - control-plane
+                topologyKey: "kubernetes.io/hostname"
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: eda.nokia.com/app-group
+                    operator: In
+                    values:
+                      - control-plane
+      # imagePullSecrets:
+      #   - name: core # kpt-set: ${CORE_IMG_CREDENTIALS}
+      containers:
+        - name: gogs
+          image: ghcr.io/nokia-eda/adm/gogs:0.13.0 # kpt-set: ${GOGS_IMG_TAG}
+          #image: gogs/gogs:latest
+          ports:
+            - containerPort: 22
+              name: ssh
+            - containerPort: 3000
+              name: http
+          command: ['bash', '-c', "/init/init.sh"]
+          env:
+            - name: SOCAT_LINK
+              value: "false"
+            - name: REPOS_TOCREATE
+              value: "catalog playground kpt connect-k8s-helm-charts" # kpt-set: ${REPOS_TOCREATE}
+          volumeMounts:
+            - name: init
+              mountPath: /init
+            - name: config
+              mountPath: /app/gogs/custom/conf
+            - name: config
+              mountPath: /data/gogs/conf
+            - name: user-config
+              readOnly: true
+              mountPath: "/var/run/eda/user-config"
+            # - name: readme
+            # mountPath: /data/gogs/conf/readme
+            # - name: readme
+            # mountPath: /app/gogs/custom/conf/readme
+            - name: eda-git-persistent-storage
+              mountPath: /data
+      volumes:
+        - name: config
+          configMap:
+            name: gogs-config
+            defaultMode: 0744
+        - name: readme
+          configMap:
+            name: gogs-readme-template
+            defaultMode: 0744
+        - name: init
+          configMap:
+            name: init-script
+            defaultMode: 0755
+        - name: user-config
+          secret:
+            secretName: gogs-admin-user
+        - name: eda-git-persistent-storage
+          persistentVolumeClaim:
+            claimName: eda-git-pv-claim

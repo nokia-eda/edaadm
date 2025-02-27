@@ -1,0 +1,59 @@
+version: 1.0.0
+name: k8s-storage-v1.0.0
+assets:
+  registries:
+    - name: docker.io
+      images:
+        - name: rancher/local-path-provisioner
+          platform: linux/amd64
+          tags:
+            - v0.0.30
+        - name: busybox
+          platform: linux/amd64
+          tags:
+            - latest
+        - name: library/busybox
+          platform: linux/amd64
+          tags:
+            - latest
+        - name: rook/ceph
+          platform: linux/amd64
+          tags:
+            - v1.15.0
+    - name: quay.io
+      images:
+        - name: ceph/ceph
+          platform: linux/amd64
+          tags:
+            - v18.2.4
+        - name: cephcsi/cephcsi
+          platform: linux/amd64
+          tags:
+            - v3.12.0
+    - name: registry.k8s.io
+      images:
+        - name: sig-storage/csi-attacher
+          platform: linux/amd64
+          tags:
+            - v4.6.1
+        - name: sig-storage/csi-node-driver-registrar
+          platform: linux/amd64
+          tags:
+            - v2.11.1
+        - name: sig-storage/csi-provisioner
+          platform: linux/amd64
+          tags:
+            - v5.0.1
+        - name: sig-storage/csi-resizer
+          platform: linux/amd64
+          tags:
+            - v1.11.1
+        - name: sig-storage/csi-snapshotter
+          platform: linux/amd64
+          tags:
+            - v8.0.1
+  artifacts:
+    - name: rook-ceph-v1.15.0.tgz
+      url: https://charts.rook.io/release/rook-ceph-v1.15.0.tgz
+    - name: rook-ceph-cluster-v1.15.0.tgz
+      url: https://charts.rook.io/release/rook-ceph-cluster-v1.15.0.tgz

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gogs-admin-user
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST} # kpt-set: ${EDA_GOGS_NAMESPACE}
+  labels:
+    eda.nokia.com/backup: "true"
+type: kubernetes.io/basic-auth
+stringData:
+  username: ZWRhCg== # kpt-set: ${GOGS_ADMIN_USER}
+  password: ZWRhCg== # kpt-set: ${GOGS_ADMIN_PASS}

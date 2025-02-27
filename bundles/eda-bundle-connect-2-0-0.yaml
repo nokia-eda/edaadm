@@ -1,0 +1,29 @@
+version: 1.0.0
+name: connect-2.0.0
+assets:
+  registries:
+    - name: ghcr.io
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1h6UnhjR3BQYW5KMWVWSlhhM1p6YzBOR2NVZEVOVUZsWjI5Vk4zZFhZVE40YzBOS1NnPT0=
+      images:
+        - name: nokia-eda/apps/connect
+          format: oci
+          tags:
+            - v2.0.0
+        - name: nokia-eda/apps/vmware-plugin
+          format: oci
+          tags:
+            - v2.0.0
+        - name: nokia-eda/eda-connect-k8s-controller
+          tags:
+            - v2.0.0
+    - name: gcr.io
+      images:
+        - name: kubebuilder/kube-rbac-proxy
+          tags:
+            - v0.14.1
+  repos:
+    - remote: https://github.com/nokia-eda/connect-k8s-helm-charts.git
+      name: connect-k8s-helm-charts

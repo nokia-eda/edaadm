@@ -1,0 +1,54 @@
+version: 1.9.2
+name: talos-v1.9.2
+assets:
+  registries:
+    - name: gcr.io
+      images:
+        - name: etcd-development/etcd
+          platform: linux/amd64
+          tags:
+            - v3.5.17
+    - name: ghcr.io
+      images:
+        - name: siderolabs/flannel
+          platform: linux/amd64
+          tags:
+            - v0.26.1
+        - name: siderolabs/kubelet
+          platform: linux/amd64
+          tags:
+            - v1.32.0
+        - name: siderolabs/installer
+          platform: linux/amd64
+          tags:
+            - v1.9.2
+    - name: registry.k8s.io
+      images:
+        - name: coredns/coredns
+          platform: linux/amd64
+          tags:
+            - v1.12.0
+        - name: kube-apiserver
+          platform: linux/amd64
+          tags:
+            - v1.32.0
+        - name: kube-controller-manager
+          platform: linux/amd64
+          tags:
+            - v1.32.0
+        - name: kube-scheduler
+          platform: linux/amd64
+          tags:
+            - v1.32.0
+        - name: kube-proxy
+          platform: linux/amd64
+          tags:
+            - v1.32.0
+        - name: pause
+          platform: linux/amd64
+          tags:
+            - 3.10
+        - name: pause
+          platform: linux/amd64
+          tags:
+            - 3.9

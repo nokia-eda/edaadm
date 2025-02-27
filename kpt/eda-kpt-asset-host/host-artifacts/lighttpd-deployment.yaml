@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lighttpd
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST}
+  labels:
+    app.kubernetes.io/instance: lighttpd
+    app.kubernetes.io/name: lighttpd
+    app.kubernetes.io/version: latest
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: lighttpd
+      app.kubernetes.io/name: lighttpd
+  replicas: 1
+  # revisionHistoryLimit: 10
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: lighttpd
+        app.kubernetes.io/name: lighttpd
+        app.kubernetes.io/version: latest
+    spec:
+      volumes:
+        - name: lighttpd-config-volume
+          configMap:
+            name: lighttpd-config
+            defaultMode: 0777
+        - name: lighttpd-storage
+          persistentVolumeClaim:
+            claimName: lighttpd-pvc
+      # initContainers:
+      #   - name: initialize-health-status
+      #     image: rtsp/lighttpd
+      #     #command: ["touch", "/var/www/html/health"]
+      #     command: ["sh", "-c", "echo `date` initializing > /var/www/html/health"]
+      #     volumeMounts:
+      #       - mountPath: "/bin/checkup_something_status.sh"
+      #         name: lighttpd-config-volume
+      #         subPath: checkup_something_status.sh
+      #       - mountPath: "/var/www/html"
+      #         name: lighttpd-storage
+      containers:
+        - name: lighttpd
+          image: ghcr.io/nokia-eda/adm/lighthttpd:1.4.76
+          ports:
+            - name: http
+              containerPort: 80
+            - name: https # This is dummy for now
+              containerPort: 443
+          # livenessProbe:
+          #   tcpSocket:
+          #     port: http
+          #   initialDelaySeconds: 180
+          #   periodSeconds: 20
+          #   timeoutSeconds: 5
+          #   successThreshold: 1
+          #   failureThreshold: 6
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: http
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 10
+          #   timeoutSeconds: 5
+          #   successThreshold: 1
+          #   failureThreshold: 6
+          #command: ["tail", "-f", "/dev/null"]
+          #command: ["sleep", "infinity"]
+          #command: ["checkup_something_status.sh", "450"]
+          volumeMounts:
+            # - mountPath: "/bin/checkup_something_status.sh"
+            #   name: lighttpd-config-volume
+            #   subPath: checkup_something_status.sh
+            - mountPath: "/var/www/html"
+              name: lighttpd-storage
+            - mountPath: "/etc/lighttpd/conf.d/15-dirlisting.conf"
+              name: lighttpd-config-volume
+              subPath: 15-dirlisting.conf
+            - mountPath: "/etc/lighttpd/conf.d/15-webdav.conf"
+              name: lighttpd-config-volume
+              subPath: 15-webdav.conf

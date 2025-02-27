@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gogs-config
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST} # kpt-set: ${EDA_GOGS_NAMESPACE}
+data:
+  app.ini: |
+    BRAND_NAME = EDA
+    RUN_USER = git
+    RUN_MODE = prod
+    [log]
+    LEVEL     = info
+    [repository]
+    AUTO_INIT = true
+    FORCE_PRIVATE = true
+    [server]
+    OFFLINE_MODE = true
+    [database]
+    TYPE = sqlite3
+    [security]
+    INSTALL_LOCK = true
+    LOCAL_NETWORK_ALLOWLIST = *
+    [auth]
+    DISABLE_REGISTRATION = true
+    [server]
+    EXTERNAL_URL = /git
+  readme: |-
+    # {Name}
+
+    {Description}

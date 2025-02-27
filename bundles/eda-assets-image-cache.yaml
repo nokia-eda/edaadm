@@ -1,0 +1,73 @@
+version: 2.0.0
+name: edaadm-image-cache-v2.0.0
+assets:
+  registries:
+    - name: docker.io
+      images:
+        - name: busybox
+          tags:
+            - latest
+        - name: library/busybox
+          tags:
+            - latest
+        - name: rancher/local-path-provisioner
+          tags:
+            - v0.0.30
+    - name: gcr.io
+      images:
+        - name: etcd-development/etcd
+          tags:
+            - v3.5.17
+    - name: ghcr.io
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1h6UnhjR3BQYW5KMWVWSlhhM1p6YzBOR2NVZEVOVUZsWjI5Vk4zZFhZVE40YzBOS1NnPT0=
+      images:
+        - name: nokia-eda/adm/gogs
+          tags:
+            - 0.13.0
+        - name: nokia-eda/adm/lighthttpd
+          tags:
+            - 1.4.76
+        - name: nokia-eda/adm/registry
+          tags:
+            - 2.8.3
+        - name: siderolabs/flannel
+          tags:
+            - v0.26.1
+        - name: siderolabs/installer
+          tags: 
+            - v1.9.2
+        - name: siderolabs/kubelet
+          tags:
+            - v1.32.0
+    - name: registry.k8s.io
+      images:
+        - name: coredns/coredns
+          tags:
+            - v1.12.0
+        - name: kube-apiserver
+          tags:
+            - v1.32.0
+        - name: kube-controller-manager
+          tags:
+            - v1.32.0
+        - name: kube-proxy
+          tags:
+            - v1.32.0
+        - name: kube-scheduler
+          tags: 
+            - v1.32.0
+        - name: pause
+          tags:
+            - 3.10
+        - name: ingress-nginx/controller
+          tags:
+            - v1.12.0
+        - name: ingress-nginx/kube-webhook-certgen
+          tags:
+            - v1.5.0
+        - name: ingress-nginx/kube-webhook-certgen
+          tags:
+            - v1.5.0

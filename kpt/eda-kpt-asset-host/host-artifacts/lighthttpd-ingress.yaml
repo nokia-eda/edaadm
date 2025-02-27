@@ -1,0 +1,102 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lighttpd
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST}
+  labels:
+    app.kubernetes.io/instance: lighttpd
+    app.kubernetes.io/name: lighttpd
+    app.kubernetes.io/version: latest
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      if ($request_method != GET) {
+        add_header Content-Length 0;
+        add_header Content-Type text/plain;
+        return 405;
+      }
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: artifacts.assets.local
+      http:
+        paths:
+          - path: /artifacts(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: lighttpd
+                port:
+                  name: http
+    - host: ""
+      http:
+        paths:
+          - path: /artifacts(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: lighttpd
+                port:
+                  name: http
+    - host: "user.domain"
+      http:
+        paths:
+          - path: /artifacts(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: lighttpd
+                port:
+                  name: http
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lighttpd-upload
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST}
+  labels:
+    app.kubernetes.io/instance: lighttpd
+    app.kubernetes.io/name: lighttpd
+    app.kubernetes.io/version: latest
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    # type of authentication
+    nginx.ingress.kubernetes.io/auth-type: basic
+    # name of the secret that contains the user/password definitions
+    nginx.ingress.kubernetes.io/auth-secret: lighttpd-ingress-auth
+    # message to display with an appropriate context why the authentication is required
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: upload.artifacts.assets.local
+      http:
+        paths:
+          - path: /artifacts-upload(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: lighttpd
+                port:
+                  name: http
+    - host: ""
+      http:
+        paths:
+          - path: /artifacts-upload(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: lighttpd
+                port:
+                  name: http
+    - host: "user.domain"
+      http:
+        paths:
+          - path: /artifacts-upload(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: lighttpd
+                port:
+                  name: http

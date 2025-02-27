@@ -1,0 +1,25 @@
+version: 1.0.0
+name: tools-1.0.0
+assets:
+  registries:
+    - name: ghcr.io
+      images:
+        - name: srl-labs/kpt-apply-setters
+          platform: linux/amd64
+          tags:
+            - 0.1.1
+  artifacts:
+    - name: kind-v0.24.0
+      url: https://kind.sigs.k8s.io/dl/v0.24.0/kind-linux-amd64
+    - name: kubectl-v1.31.1
+      url: https://dl.k8s.io/release/v1.32.0/bin/linux/amd64/kubectl
+    - name: kpt-v1.0.0-beta.44
+      url: https://github.com/GoogleContainerTools/kpt/releases/download/v1.0.0-beta.44/kpt_linux_amd64
+    - name: helm-v3.17.0.tar.gz
+      url: https://get.helm.sh/helm-v3.17.0-linux-amd64.tar.gz
+    - name: edaadm-v1.0.0
+      url: https://github.com/nokia-eda/edaadm/releases/download/v1.0.0/edaadm-linux-amd64
+    - name: yq-v4.42.1
+      url: https://github.com/mikefarah/yq/releases/download/v4.42.1/yq_linux_amd64
+    - name: k9s-v0.32.5.tar.gz
+      url: https://github.com/derailed/k9s/releases/download/v0.32.5/k9s_Linux_amd64.tar.gz

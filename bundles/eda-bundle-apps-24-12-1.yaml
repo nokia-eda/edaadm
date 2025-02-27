@@ -1,0 +1,124 @@
+version: 1.0.0
+name: apps-24.12.1
+assets:
+  registries:
+    - name: ghcr.io
+      # tlsVerify: false
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1h6UnhjR3BQYW5KMWVWSlhhM1p6YzBOR2NVZEVOVUZsWjI5Vk4zZFhZVE40YzBOS1NnPT0=
+      images:
+        - name: nokia-eda/apps/aaa
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/anomalies
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/bootstrap
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/components
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/config
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/demo
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/environment
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/fabrics
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/filters
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/interfaces
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/oam
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/operatingsystem
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/protocols
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/qos
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/routing
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/routingpolicies
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/security
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/services
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/siteinfo
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/system
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/timing
+          format: oci
+          tags:
+            - 24.12.1
+        - name: nokia-eda/apps/topologies
+          format: oci
+          tags:
+            - 24.12.1
+# Workflows
+        - name: nokia-eda/workflow-operatingsystem-image
+          tags:
+            - 2.0.0
+        - name: nokia-eda/workflow-environment-cliplugin
+          tags:
+            - 2.0.0
+        - name: nokia-eda/workflow-environment-env
+          tags:
+            - 2.0.0
+        - name: nokia-eda/workflow-protocols-checkdefaultbgppeers
+          tags:
+            - 2.0.0
+        - name: nokia-eda/workflow-services-edgeping
+          tags:
+            - 2.0.0
+        - name: nokia-eda/workflow-interfaces-checkinterfaces
+          tags:
+            - 2.0.0
+        - name: nokia-eda/workflow-oam-ping
+          tags:
+            - 2.0.0
+  artifacts:
+    - name: srlinux-24.10.1-492.zip
+      url: https://github.com/nokia/srlinux-yang-models/releases/download/v24.10.1/srlinux-24.10.1-492.zip

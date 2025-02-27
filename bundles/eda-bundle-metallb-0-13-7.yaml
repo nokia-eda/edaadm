@@ -1,0 +1,14 @@
+version: 1.0.0
+name: metallb-v0.13.7
+assets:
+  registries:
+    - name: quay.io
+      images:
+        - name: metallb/controller
+          platform: linux/amd64
+          tags:
+            - v0.13.7
+        - name: metallb/speaker
+          platform: linux/amd64
+          tags:
+            - v0.13.7
