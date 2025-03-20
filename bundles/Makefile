@@ -51,14 +51,19 @@ TALOS_IMAGER_IMG ?= ghcr.io/siderolabs/imager:v1.9.2
 # This is the parent directory where we store/load everything for this Makefile
 OUTPUT_DIR ?= $(TOP_DIR)/eda-cargo
 
+EDA_CORE_REL ?= 24.12.3
+
 # This is the name of files without the yaml extension
 # We could have used a find expression, but best to
 # manually control, that way we can control when to enable things
 BUNDLE_LIST=
 BUNDLE_LIST += eda-bundle-apps-24-12-1
 BUNDLE_LIST += eda-bundle-apps-24-12-2
+BUNDLE_LIST += eda-bundle-apps-24-12-3
 BUNDLE_LIST += eda-bundle-connect-2-0-0
+BUNDLE_LIST += eda-bundle-connect-2-0-1
 BUNDLE_LIST += eda-bundle-core-24-12-2
+BUNDLE_LIST += eda-bundle-core-24-12-3
 BUNDLE_LIST += eda-bundle-kafka-exporter-2-0-1
 BUNDLE_LIST += eda-bundle-metallb-0-13-7
 BUNDLE_LIST += eda-bundle-notifier-2-0-0
@@ -67,9 +72,20 @@ BUNDLE_LIST += eda-bundle-prom-exporter-2-0-0
 BUNDLE_LIST += eda-bundle-service-now-1-0-0
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-1-492
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-2-357
-BUNDLE_LIST += eda-bundle-storage-1-0-0
+BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-3-201
 BUNDLE_LIST += eda-bundle-talos-1-9-2
 BUNDLE_LIST += eda-bundle-tools-1-0-0
+# Run this last
+BUNDLE_LIST += eda-bundle-storage-1-0-0
+
+# Skip core bundles based on the selected release
+ifeq ($(EDA_CORE_REL),24.12.3)
+eda-bundle-core-24-12-2_SKIP=1
+else ifeq ($(EDA_CORE_REL),24.12.2)
+eda-bundle-core-24-12-3_SKIP=1
+else
+$(error [ERROR] EDA_CORE_REL=$(EDA_CORE_REL) is set to an invalid version!)
+endif
 
 # Optional bundles to skip the default list
 # eda-bundle-sim-ghcr-srlinux-24-10-1-492_SKIP=1
@@ -281,6 +297,7 @@ check-load-params:
 
 .PHONY: ls-bundles
 ls-bundles: | $(BASE) ; @ ## Show which bundle files are found
+	@echo "--> Default eda core version to load/save: EDA_CORE_REL=$(EDA_CORE_REL)"
 	@echo "--> List of bundles:"
 	@echo "$(BUNDLE_LIST)" | tr ' ' '\n' | sort | sed 's/^/    |-> /'
 	@echo "--> Default list:"

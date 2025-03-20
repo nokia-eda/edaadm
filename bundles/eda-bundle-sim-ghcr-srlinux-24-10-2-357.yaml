@@ -8,7 +8,3 @@ assets:
           platform: linux/amd64
           tags:
             - 24.10.2-357
-        - name: nokia/srlinux
-          platform: linux/amd64
-          tags:
-            - 24.10.2

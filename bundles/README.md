@@ -29,6 +29,8 @@
   * `OUTPUT_DIR`
     * Root dir where this `Makefile` load/save assets.
     * Default is `$(pwd)/eda-cargo`
+  * `EDA_CORE_REL` version of core to load/save by default.
+    * `make ls-bundles` will show the default value, this is the latest released version.
 
 ---
 
