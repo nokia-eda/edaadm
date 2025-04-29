@@ -9,16 +9,6 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: registry.assets.local
-      http:
-        paths:
-          - path: /v2
-            pathType: Prefix
-            backend:
-              service:
-                name: registry-docker-registry
-                port:
-                  number: 5000
     - host: ""
       http:
         paths:

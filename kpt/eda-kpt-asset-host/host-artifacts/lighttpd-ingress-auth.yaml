@@ -6,4 +6,4 @@ metadata:
   labels:
     eda.nokia.com/backup: "true"
 data: # generated using htpasswd -c /tmp/auth eda # password is eda
-  auth: ZWRhOiRhcHIxJE15RHNDZE1CJDBVRWNEc2RHWG9xaFdTZW5VVTBNSjEK # kpt-set: ${LIGHTTPD_EDA_HTPASSWD}
+  auth: ZWRhOiRhcHIxJE15RHNDZE1CJDBVRWNEc2RHWG9xaFdTZW5VVTBNSjEK # kpt-set: ${ASSET_HOST_ARTIFACTS_HTPASSWORD}

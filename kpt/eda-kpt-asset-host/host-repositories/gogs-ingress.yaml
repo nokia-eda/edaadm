@@ -15,27 +15,7 @@ metadata:
 spec:
   ingressClassName: "nginx"
   rules:
-    - host: git.assets.local
-      http:
-        paths:
-          - path: /git(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: eda-git
-                port:
-                  name: web
     - host: ""
-      http:
-        paths:
-          - path: /git(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: eda-git
-                port:
-                  name: web
-    - host: "user.domain"
       http:
         paths:
           - path: /git(/|$)(.*)

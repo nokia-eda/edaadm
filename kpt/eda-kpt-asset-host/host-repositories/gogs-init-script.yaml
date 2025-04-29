@@ -2,11 +2,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: init-script
-  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST} # kpt-set: ${EDA_GOGS_NAMESPACE}
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST}
 data:
   init.sh: |-
     #!/bin/bash
-    REPOS="${REPOS_TOCREATE:-catalog playground kpt connect-k8s-helm-charts}"
+    REPOS="${REPOS_TO_CREATE:-catalog playground kpt connect-k8s-helm-charts}"
     # Number of seconds to wait for gogs to comeup
     MAX_RETRIES=30
     # MAX number of tries to create a repo
@@ -39,7 +39,7 @@ data:
             echo "--> [$(date)] Creating repository: ${repo}"
             curl \
                 --fail-with-body \
-                -X POST localhost:3000/api/v1/admin/users/eda/repos \
+                -X POST localhost:3000/api/v1/admin/users/${ADMIN_USER}/repos \
                 -H "Content-Type: application/json" \
                 -d "{\"name\":\"${repo}\",\"description\":\"Repository storing saved ${repo}\",\"auto_init\":true,\"private\":true}" \
                 --user "${ADMIN_USER}:${ADMIN_PASS}"
@@ -73,7 +73,7 @@ data:
 
     if [[ ! -f "${INIT_MARKER}" ]] then
       echo "--> [$(date)] Init marker at ${INIT_MARKER} not found, creating admin user and repos"
-      su - git -c "/app/gogs/gogs admin create-user --name ${ADMIN_USER} --password ${ADMIN_PASS} --admin --email eda@eda.dev"
+      su - git -c "/app/gogs/gogs admin create-user --name ${ADMIN_USER} --password ${ADMIN_PASS} --admin --email ${ADMIN_USER}@git.eda.dev"
       for repo in ${REPOS}; do
           create_repo "$repo"
       done

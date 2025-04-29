@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: lighttpd
+  name: lighttpd-upload
   namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST}
   labels:
     app.kubernetes.io/instance: lighttpd
@@ -10,19 +10,17 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      if ($request_method != GET) {
-        add_header Content-Length 0;
-        add_header Content-Type text/plain;
-        return 405;
-      }
+    # type of authentication
+    nginx.ingress.kubernetes.io/auth-type: basic
+    # name of the secret that contains the user/password definitions
+    nginx.ingress.kubernetes.io/auth-secret: lighttpd-ingress-auth
 spec:
   ingressClassName: "nginx"
   rules:
     - host: ""
       http:
         paths:
-          - path: /artifacts(/|$)(.*)
+          - path: /artifacts-upload(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
               service:

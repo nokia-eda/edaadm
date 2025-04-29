@@ -31,6 +31,8 @@ INDENT_OUT := $(SED) 's/^/    /'
 TIMEOUT_INGRESS ?= 120s
 
 EDA_ASSETS_NS ?= eda-assets
+ASSET_HOST_HTTP_PORT ?= 80
+ASSET_HOST_HTTPS_PORT ?= 443
 
 ## Tool Versions:
 KPT_VERSION ?= v1.0.0-beta.44
@@ -114,6 +116,26 @@ $(KUBECTL): | $(BASE) $(TOOLS) ; $(info --> TOOLS: Ensuring kubectl is present i
 $(KPT): | $(BASE) $(TOOLS) ; $(info --> TOOLS: Ensuring kpt is present in $(KPT))
 	@$(call download-bin,$(KPT),$(KPT_SRC))
 
+##@ Configure components
+
+.PHONY: eda-configure-shipyard
+eda-configure-shipyard: | $(KPT) ; $(info --> INFO: configuring shipyard) @ ## Configure the shipyard
+	@{	\
+		if [[ -z "$(ASSET_HOST_GIT_USERNAME)" ]]; then echo "[ERROR]: ASSET_HOST_GIT_USERNAME must be defined" && exit 1; fi ;\
+		if [[ -z "$(ASSET_HOST_GIT_PASSWORD)" ]]; then echo "[ERROR]: ASSET_HOST_GIT_PASSWORD must be defined" && exit 1; fi ;\
+		if [[ -z "$(ASSET_HOST_ARTIFACTS_HTPASSWORD)" ]]; then echo "[ERROR]: ASSET_HOST_ARTIFACTS_HTPASSWORD must be defined" && exit 1; fi ;\
+	}
+	@{	\
+		$(KPT) fn eval \
+		--image $(APPLY_SETTER_IMG) \
+		--truncate-output=false \
+		-- \
+		ASSET_HOST_GIT_USERNAME=$(ASSET_HOST_GIT_USERNAME) \
+		ASSET_HOST_GIT_PASSWORD=$(ASSET_HOST_GIT_PASSWORD) \
+		ASSET_HOST_ARTIFACTS_HTPASSWORD=$(ASSET_HOST_ARTIFACTS_HTPASSWORD) \
+		;\
+	}
+
 ##@ Install K8S components
 
 .PHONY: ingress
@@ -144,12 +166,12 @@ storage: | $(BASE) download-tools ; @ ## Install storage - local-path-provisione
 		echo "--> STORAGE: local-path-provisioner launch took $$(echo "$$(date +%s.%N) - $$START" | bc)"		;\
 	}
 
-.PHONY: eda-asset-host
-eda-asset-host: | $(BASE) download-tools ; @ ## Install the asset-hoster components - registry, git server, web host
+.PHONY: eda-shipyard
+eda-shipyard: | $(BASE) download-tools ; @ ## Install the shipyard components - registry, git server, web host
 	@$(call INSTALL_KPT_PACKAGE,eda-kpt-asset-host,asset-host)
 
 .PHONY: eda-setup-shipyard
-eda-setup-shipyard: | ingress storage eda-asset-host ; @ ## Install ingress, storage and eda-asset-hoster
+eda-setup-shipyard: | ingress storage eda-shipyard ; @ ## Install ingress, storage and eda-asset-hoster
 
 ##@ Uninstall K8S components
 
@@ -173,3 +195,8 @@ uninstall-eda-shipyard: | uninstall-ingress uninstall-storage uninstall-eda-asse
 .PHONY: help
 help:  ## Show the help menu
 	@sed -ne 's/^\([^[:space:]]*\):.*##/\1\t|\t/p' $(MAKEFILE_LIST) | sort | column -t -s $$'\t' | pager
+
+
+.PHONY: ls-setters
+ls-setters: | $(BASE) ## View available kpt setters
+	@$(KPT) fn eval -i list-setters:v0.1.0 --truncate-output=false

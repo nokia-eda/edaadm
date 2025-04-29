@@ -51,7 +51,7 @@ TALOS_IMAGER_IMG ?= ghcr.io/siderolabs/imager:v1.9.2
 # This is the parent directory where we store/load everything for this Makefile
 OUTPUT_DIR ?= $(TOP_DIR)/eda-cargo
 
-EDA_CORE_REL ?= 24.12.3
+EDA_CORE_REL ?= 24.12.4
 
 # This is the name of files without the yaml extension
 # We could have used a find expression, but best to
@@ -60,10 +60,12 @@ BUNDLE_LIST=
 BUNDLE_LIST += eda-bundle-apps-24-12-1
 BUNDLE_LIST += eda-bundle-apps-24-12-2
 BUNDLE_LIST += eda-bundle-apps-24-12-3
+BUNDLE_LIST += eda-bundle-apps-24-12-4
 BUNDLE_LIST += eda-bundle-connect-2-0-0
 BUNDLE_LIST += eda-bundle-connect-2-0-1
 BUNDLE_LIST += eda-bundle-core-24-12-2
 BUNDLE_LIST += eda-bundle-core-24-12-3
+BUNDLE_LIST += eda-bundle-core-24-12-4
 BUNDLE_LIST += eda-bundle-kafka-exporter-2-0-1
 BUNDLE_LIST += eda-bundle-metallb-0-13-7
 BUNDLE_LIST += eda-bundle-notifier-2-0-0
@@ -79,9 +81,14 @@ BUNDLE_LIST += eda-bundle-tools-1-0-0
 BUNDLE_LIST += eda-bundle-storage-1-0-0
 
 # Skip core bundles based on the selected release
-ifeq ($(EDA_CORE_REL),24.12.3)
+ifeq ($(EDA_CORE_REL),24.12.4)
+eda-bundle-core-24-12-3_SKIP=1
+eda-bundle-core-24-12-2_SKIP=1
+else ifeq ($(EDA_CORE_REL),24.12.3)
+eda-bundle-core-24-12-4_SKIP=1
 eda-bundle-core-24-12-2_SKIP=1
 else ifeq ($(EDA_CORE_REL),24.12.2)
+eda-bundle-core-24-12-4_SKIP=1
 eda-bundle-core-24-12-3_SKIP=1
 else
 $(error [ERROR] EDA_CORE_REL=$(EDA_CORE_REL) is set to an invalid version!)
@@ -156,7 +163,7 @@ load-$1: | $(OUTPUT_DIR) $(EDAADM) check-load-params
 		--dest-artifactserver "http://$(ASSET_HOST)/artifacts-upload" \
 		--dest-artifactserver-user $(ASSET_HOST_ARTIFACTS_USERNAME) \
 		--dest-artifactserver-pass $(ASSET_HOST_ARTIFACTS_PASSWORD) \
-		--dest-reposerver http://$(ASSET_HOST)/git/eda \
+		--dest-reposerver http://$(ASSET_HOST)/git/$$$$(echo -n "$(ASSET_HOST_GIT_USERNAME)" | base64 -d) \
 		--dest-reposerver-user $(ASSET_HOST_GIT_USERNAME) \
 		--dest-reposerver-pass $(ASSET_HOST_GIT_PASSWORD) | sed 's/^/    /';\
 		echo "--> [LOAD] Loaded from $1"				;\

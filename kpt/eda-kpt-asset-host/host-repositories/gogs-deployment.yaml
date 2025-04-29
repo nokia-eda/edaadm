@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: eda-git
-  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST} # kpt-set: ${EDA_GOGS_NAMESPACE}
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST}
   labels:
     eda.nokia.com/app: git
     eda.nokia.com/app-group: control-plane
@@ -53,8 +53,8 @@ spec:
           env:
             - name: SOCAT_LINK
               value: "false"
-            - name: REPOS_TOCREATE
-              value: "catalog playground kpt connect-k8s-helm-charts" # kpt-set: ${REPOS_TOCREATE}
+            - name: REPOS_TO_CREATE
+              value: "catalog playground kpt connect-k8s-helm-charts" # kpt-set: ${REPOS_TO_CREATE}
           volumeMounts:
             - name: init
               mountPath: /init

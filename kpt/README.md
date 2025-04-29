@@ -3,8 +3,9 @@
 ---
 - [The EDA-Asset Shipyard](#the-eda-asset-shipyard)
   - [Customize the package:](#customize-the-package)
+    - [Customize the passwords:](#customize-the-passwords)
     - [Make options:](#make-options)
-    - [KPT setters to customize defaults:](#kpt-setters-to-customize-defaults)
+    - [List KPT setters to customize defaults:](#list-kpt-setters-to-customize-defaults)
       - [Authentication parameters](#authentication-parameters)
   - [Apply the package](#apply-the-package)
     - [Set the `kubeconfig` for the asset cluster](#set-the-kubeconfig-for-the-asset-cluster)
@@ -27,6 +28,17 @@ This package boots up the following components on a given kubernetes cluster:
 
 ---
 
+### Customize the passwords:
+
+```shell
+make eda-configure-shipyard \
+ASSET_HOST_GIT_USERNAME=<base64 encoded username> \
+ASSET_HOST_GIT_PASSWORD=<base64 encoded password> \
+ASSET_HOST_ARTIFACTS_HTPASSWORD=<htpasswd encoded string>
+```
+
+---
+
 ### Make options:
 
 * Tools:
@@ -36,11 +48,16 @@ This package boots up the following components on a given kubernetes cluster:
 
 ---
 
-### KPT setters to customize defaults:
+### List KPT setters to customize defaults:
 
+```shell
+make ls-setters
+```
+or
 ```shell
 kpt fn eval --image gcr.io/kpt-fn/list-setters:v0.1.0 --truncate-output=false |& grep -v -e '^\[RUNNING\].*$' -e'^\[PASS\].*$' -e'\ *Results\:.*$' | awk '{$1=$1;print}'
 ```
+will list:
 ```yaml
 [info]: Name: EDA_ASSET_REGISTRY_PVC, Value: 10Gi, Type: str, Count: 1
 [info]: Name: EDA_NAMESPACE_ASSET_HOST, Value: eda-assets, Type: str, Count: 14

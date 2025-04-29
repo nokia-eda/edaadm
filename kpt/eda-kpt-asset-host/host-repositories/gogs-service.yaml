@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: eda-git
-  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST} # kpt-set: ${EDA_GOGS_NAMESPACE}
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST}
   labels:
     eda.nokia.com/app: git
 spec:
