@@ -73,6 +73,7 @@ BUNDLE_LIST += eda-bundle-kafka-exporter-2-0-1
 BUNDLE_LIST += eda-bundle-kafka-exporter-3-0-0
 BUNDLE_LIST += eda-bundle-metallb-0-13-7
 BUNDLE_LIST += eda-bundle-nats-exporter-1-0-0
+BUNDLE_LIST += eda-bundle-netbox-1-0-0
 BUNDLE_LIST += eda-bundle-notifier-2-0-0
 BUNDLE_LIST += eda-bundle-pager-duty-1-0-0
 BUNDLE_LIST += eda-bundle-prom-exporter-2-0-0

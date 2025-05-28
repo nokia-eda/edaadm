@@ -102,34 +102,34 @@ assets:
           tags:
           - v3.0.0
         # Workflows
-        - name: ghcr.io/nokia-eda/workflows/workflow-demo-interfacebounce
+        - name: nokia-eda/workflows/workflow-demo-interfacebounce
           tags:
           - v3.0.0
-        - name: ghcr.io/nokia-eda/workflows/workflow-demo-interfaceupcheck
+        - name: nokia-eda/workflows/workflow-demo-interfaceupcheck
           tags:
           - v3.0.0
-        - name: ghcr.io/nokia-eda/workflows/workflow-environment-cliplugin
+        - name: nokia-eda/workflows/workflow-environment-cliplugin
           tags:
           - v3.0.0
-        - name: ghcr.io/nokia-eda/workflows/workflow-environment-env
+        - name: nokia-eda/workflows/workflow-environment-env
           tags:
           - v3.0.0
-        - name: ghcr.io/nokia-eda/workflows/workflow-interfaces-checkinterfaces
+        - name: nokia-eda/workflows/workflow-interfaces-checkinterfaces
           tags:
           - v3.0.0
-        - name: ghcr.io/nokia-eda/workflows/workflow-oam-ping
+        - name: nokia-eda/workflows/workflow-oam-ping
           tags:
           - v3.0.0
-        - name: ghcr.io/nokia-eda/workflows/workflow-oam-techsupport
+        - name: nokia-eda/workflows/workflow-oam-techsupport
           tags:
           - v3.0.0
-        - name: ghcr.io/nokia-eda/workflows/workflow-operatingsystem-image
+        - name: nokia-eda/workflows/workflow-operatingsystem-image
           tags:
           - v3.0.0
-        - name: ghcr.io/nokia-eda/workflows/workflow-protocols-checkdefaultbgppeers
+        - name: nokia-eda/workflows/workflow-protocols-checkdefaultbgppeers
           tags:
           - v3.0.0
-        - name: ghcr.io/nokia-eda/workflows/workflow-services-edgeping
+        - name: nokia-eda/workflows/workflow-services-edgeping
           tags:
           - v3.0.0
   artifacts:

@@ -9,10 +9,10 @@ assets:
         username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
         password: WjJod1h6UnhjR3BQYW5KMWVWSlhhM1p6YzBOR2NVZEVOVUZsWjI5Vk4zZFhZVE40YzBOS1NnPT0=
       images:
-        - name: nokia-eda/apps/netbox
+        - name: nokia-eda/netbox
           format: oci
           tags:
             - v1.0.0
-        - name: nokia-eda/apps/netbox-controller
+        - name: nokia-eda/netbox-controller
           tags:
             - v1.0.0
