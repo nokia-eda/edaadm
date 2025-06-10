@@ -51,7 +51,7 @@ TALOS_IMAGER_IMG ?= ghcr.io/siderolabs/imager:v1.9.2
 # This is the parent directory where we store/load everything for this Makefile
 OUTPUT_DIR ?= $(TOP_DIR)/eda-cargo
 
-EDA_CORE_REL ?= 25.4.1
+EDA_CORE_REL ?= 25.4.2
 
 # This is the name of files without the yaml extension
 # We could have used a find expression, but best to
@@ -62,20 +62,25 @@ BUNDLE_LIST += eda-bundle-apps-24-12-2
 BUNDLE_LIST += eda-bundle-apps-24-12-3
 BUNDLE_LIST += eda-bundle-apps-24-12-4
 BUNDLE_LIST += eda-bundle-apps-25-4-1
+BUNDLE_LIST += eda-bundle-apps-25-4-2
 BUNDLE_LIST += eda-bundle-connect-2-0-0
 BUNDLE_LIST += eda-bundle-connect-2-0-1
 BUNDLE_LIST += eda-bundle-connect-3-0-0
+BUNDLE_LIST += eda-bundle-connect-3-0-1
 BUNDLE_LIST += eda-bundle-core-24-12-2
 BUNDLE_LIST += eda-bundle-core-24-12-3
 BUNDLE_LIST += eda-bundle-core-24-12-4
 BUNDLE_LIST += eda-bundle-core-25-4-1
+BUNDLE_LIST += eda-bundle-core-25-4-2
 BUNDLE_LIST += eda-bundle-kafka-exporter-2-0-1
 BUNDLE_LIST += eda-bundle-kafka-exporter-3-0-0
 BUNDLE_LIST += eda-bundle-metallb-0-13-7
 BUNDLE_LIST += eda-bundle-nats-exporter-1-0-0
 BUNDLE_LIST += eda-bundle-netbox-1-0-0
 BUNDLE_LIST += eda-bundle-notifier-2-0-0
+BUNDLE_LIST += eda-bundle-notifier-3-0-0
 BUNDLE_LIST += eda-bundle-pager-duty-1-0-0
+BUNDLE_LIST += eda-bundle-pager-duty-2-0-0
 BUNDLE_LIST += eda-bundle-prom-exporter-2-0-0
 BUNDLE_LIST += eda-bundle-prom-exporter-3-0-0
 BUNDLE_LIST += eda-bundle-remote-write-1-0-0
@@ -85,27 +90,45 @@ BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-1-492
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-2-357
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-3-201
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-4-244
+BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-3-2-312
 BUNDLE_LIST += eda-bundle-talos-1-9-2
 BUNDLE_LIST += eda-bundle-tools-1-0-0
 # Run this last
 BUNDLE_LIST += eda-bundle-storage-1-0-0
 
 # Skip core bundles based on the selected release
-ifeq ($(EDA_CORE_REL),25.4.1)
+ifeq ($(EDA_CORE_REL),25.4.2)
+eda-bundle-core-25-4-1_SKIP=1
+eda-bundle-core-24-12-4_SKIP=1
+eda-bundle-core-24-12-3_SKIP=1
+eda-bundle-core-24-12-2_SKIP=1
+else ifeq ($(EDA_CORE_REL),25.4.1)
+eda-bundle-core-25-4-2_SKIP=1
+eda-bundle-apps-25-4-2_SKIP=1
+eda-bundle-connect-3-0-1_SKIP=1
 eda-bundle-core-24-12-4_SKIP=1
 eda-bundle-core-24-12-3_SKIP=1
 eda-bundle-core-24-12-2_SKIP=1
 else ifeq ($(EDA_CORE_REL),24.12.4)
+eda-bundle-core-25-4-2_SKIP=1
+eda-bundle-apps-25-4-2_SKIP=1
+eda-bundle-connect-3-0-1_SKIP=1
 eda-bundle-core-25-4-1_SKIP=1
 eda-bundle-apps-25-4-1_SKIP=1
 eda-bundle-core-24-12-3_SKIP=1
 eda-bundle-core-24-12-2_SKIP=1
 else ifeq ($(EDA_CORE_REL),24.12.3)
+eda-bundle-core-25-4-2_SKIP=1
+eda-bundle-apps-25-4-2_SKIP=1
+eda-bundle-connect-3-0-1_SKIP=1
 eda-bundle-core-25-4-1_SKIP=1
 eda-bundle-apps-25-4-1_SKIP=1
 eda-bundle-core-24-12-4_SKIP=1
 eda-bundle-core-24-12-2_SKIP=1
 else ifeq ($(EDA_CORE_REL),24.12.2)
+eda-bundle-core-25-4-2_SKIP=1
+eda-bundle-apps-25-4-2_SKIP=1
+eda-bundle-connect-3-0-1_SKIP=1
 eda-bundle-core-25-4-1_SKIP=1
 eda-bundle-apps-25-4-1_SKIP=1
 eda-bundle-core-24-12-4_SKIP=1
@@ -224,8 +247,7 @@ does-image-cache-exist: | $(OUTPUT_DIR)
 		image_cache_loc=$(OUTPUT_DIR)/eda-assets-image-cache	;\
 		if [[ ! -d  "$${image_cache_loc}" ]]; then \
 			echo "[ERROR] IMAGE_CACHE to embed in iso does not exist!"	;\
-			echo "        did you run save-all-bundles OR"				;\
-			echo "                    save-eda-assets-image-cache"		;\
+			echo "        did you run create-assets-host-bootstrap-image-cache";\
 			exit 1														;\
 		fi																;\
 	}
