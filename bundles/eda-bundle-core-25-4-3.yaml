@@ -8,7 +8,7 @@ assets:
       auth:
         extraEncodeCount: 1
         username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
-        password: WjJod1h6UnhjR3BQYW5KMWVWSlhhM1p6YzBOR2NVZEVOVUZsWjI5Vk4zZFhZVE40YzBOS1NnPT0=
+        password: WjJod1gyUnlUbEY0YjIxbGEyRkNhMlZJTmpGME9XaEpPVk5rTTAxVGFETXhkVEZGVVRGU2VBPT0K
       images:
         - name: nokia-eda/core/api-server
           tags:
