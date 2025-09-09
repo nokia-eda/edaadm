@@ -1,0 +1,18 @@
+version: 1.0.0
+name: otlp-exporter-v1.0.0
+assets:
+  registries:
+    - name: ghcr.io
+      # tlsVerify: false
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1gyUnlUbEY0YjIxbGEyRkNhMlZJTmpGME9XaEpPVk5rTTAxVGFETXhkVEZGVVRGU2VBPT0K
+      images:
+        - name: nokia-eda/apps/otlp-exporter
+          format: oci
+          tags:
+            - v1.0.0
+        - name: nokia-eda/apps/otlp-exporter-controller
+          tags:
+            - v1.0.0

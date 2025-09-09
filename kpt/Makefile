@@ -198,5 +198,5 @@ help:  ## Show the help menu
 
 
 .PHONY: ls-setters
-ls-setters: | $(BASE) ## View available kpt setters
+ls-setters: | $(BASE) $(KPT) ## View available kpt setters
 	@$(KPT) fn eval -i list-setters:v0.1.0 --truncate-output=false

@@ -44,14 +44,19 @@ ARGS_INSECURE += --dest-registry-insecure
 endif
 
 ## Curl options:
-CURL := curl --silent --fail --show-error
+CURL_OPTS ?= --fail --show-error --location
+CURL ?= curl --silent $(CURL_OPTS)
+# use the standard progress meter
+CURL_PM ?= curl $(CURL_OPTS)
+# use the progress bar instead of the meter - does weird things in output if there are multiple redirects/hops
+CURL_PB ?= curl $(CURL_OPTS) --progress-bar
 
 TALOS_IMAGER_IMG ?= ghcr.io/siderolabs/imager:v1.9.2
 
 # This is the parent directory where we store/load everything for this Makefile
 OUTPUT_DIR ?= $(TOP_DIR)/eda-cargo
 
-EDA_CORE_REL ?= 25.4.3
+EDA_CORE_REL ?= 25.8.1
 
 # This is the name of files without the yaml extension
 # We could have used a find expression, but best to
@@ -64,95 +69,109 @@ BUNDLE_LIST += eda-bundle-apps-24-12-4
 BUNDLE_LIST += eda-bundle-apps-25-4-1
 BUNDLE_LIST += eda-bundle-apps-25-4-2
 BUNDLE_LIST += eda-bundle-apps-25-4-3
+BUNDLE_LIST += eda-bundle-apps-25-8-1
 BUNDLE_LIST += eda-bundle-connect-2-0-0
 BUNDLE_LIST += eda-bundle-connect-2-0-1
 BUNDLE_LIST += eda-bundle-connect-3-0-0
 BUNDLE_LIST += eda-bundle-connect-3-0-1
+BUNDLE_LIST += eda-bundle-connect-4-0-0
 BUNDLE_LIST += eda-bundle-core-24-12-2
 BUNDLE_LIST += eda-bundle-core-24-12-3
 BUNDLE_LIST += eda-bundle-core-24-12-4
 BUNDLE_LIST += eda-bundle-core-25-4-1
 BUNDLE_LIST += eda-bundle-core-25-4-2
 BUNDLE_LIST += eda-bundle-core-25-4-3
+BUNDLE_LIST += eda-bundle-core-25-8-1
+BUNDLE_LIST += eda-bundle-influxdb-exporter-1-0-0
 BUNDLE_LIST += eda-bundle-kafka-exporter-2-0-1
 BUNDLE_LIST += eda-bundle-kafka-exporter-3-0-0
+BUNDLE_LIST += eda-bundle-kafka-exporter-4-0-0
 BUNDLE_LIST += eda-bundle-metallb-0-13-7
 BUNDLE_LIST += eda-bundle-nats-exporter-1-0-0
+BUNDLE_LIST += eda-bundle-nats-exporter-2-0-0
 BUNDLE_LIST += eda-bundle-netbox-1-0-0
+BUNDLE_LIST += eda-bundle-netbox-2-0-0
 BUNDLE_LIST += eda-bundle-notifier-2-0-0
 BUNDLE_LIST += eda-bundle-notifier-3-0-0
+BUNDLE_LIST += eda-bundle-notifier-4-0-0
+BUNDLE_LIST += eda-bundle-otlp-exporter-1-0-0
 BUNDLE_LIST += eda-bundle-pager-duty-1-0-0
 BUNDLE_LIST += eda-bundle-pager-duty-2-0-0
+BUNDLE_LIST += eda-bundle-pager-duty-3-0-0
 BUNDLE_LIST += eda-bundle-prom-exporter-2-0-0
 BUNDLE_LIST += eda-bundle-prom-exporter-3-0-0
+BUNDLE_LIST += eda-bundle-prom-exporter-4-0-0
 BUNDLE_LIST += eda-bundle-remote-write-1-0-0
+BUNDLE_LIST += eda-bundle-remote-write-2-0-0
 BUNDLE_LIST += eda-bundle-service-now-1-0-0
 BUNDLE_LIST += eda-bundle-service-now-2-0-0
+BUNDLE_LIST += eda-bundle-service-now-3-0-0
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-1-492
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-2-357
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-3-201
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-4-244
+BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-5-344
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-3-2-312
+BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-7-1-187
 BUNDLE_LIST += eda-bundle-talos-1-9-2
 BUNDLE_LIST += eda-bundle-tools-1-0-0
 # Run this last
 BUNDLE_LIST += eda-bundle-storage-1-0-0
 
 # Skip core bundles based on the selected release
-ifeq ($(EDA_CORE_REL),25.4.3)
+ifeq ($(EDA_CORE_REL),25.8.1)
+SKIP_CORE_25_4_X=1
+SKIP_CORE_24_12_X=1
+else ifeq ($(EDA_CORE_REL),25.4.3)
 eda-bundle-core-25-4-2_SKIP=1
 eda-bundle-core-25-4-1_SKIP=1
-eda-bundle-core-24-12-4_SKIP=1
-eda-bundle-core-24-12-3_SKIP=1
-eda-bundle-core-24-12-2_SKIP=1
+SKIP_CORE_25_8_X=1
+SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_REL),25.4.2)
 eda-bundle-core-25-4-3_SKIP=1
 eda-bundle-core-25-4-1_SKIP=1
-eda-bundle-core-24-12-4_SKIP=1
-eda-bundle-core-24-12-3_SKIP=1
-eda-bundle-core-24-12-2_SKIP=1
+SKIP_CORE_25_8_X=1
+SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_REL),25.4.1)
 eda-bundle-core-25-4-3_SKIP=1
 eda-bundle-core-25-4-2_SKIP=1
-eda-bundle-apps-25-4-2_SKIP=1
-eda-bundle-apps-25-4-3_SKIP=1
-eda-bundle-connect-3-0-1_SKIP=1
-eda-bundle-core-24-12-4_SKIP=1
-eda-bundle-core-24-12-3_SKIP=1
-eda-bundle-core-24-12-2_SKIP=1
+SKIP_CORE_25_8_X=1
+SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_REL),24.12.4)
-eda-bundle-core-25-4-3_SKIP=1
-eda-bundle-apps-25-4-3_SKIP=1
-eda-bundle-core-25-4-2_SKIP=1
-eda-bundle-apps-25-4-2_SKIP=1
-eda-bundle-connect-3-0-1_SKIP=1
-eda-bundle-core-25-4-1_SKIP=1
-eda-bundle-apps-25-4-1_SKIP=1
 eda-bundle-core-24-12-3_SKIP=1
 eda-bundle-core-24-12-2_SKIP=1
+SKIP_CORE_25_8_X=1
+SKIP_CORE_25_4_X=1
 else ifeq ($(EDA_CORE_REL),24.12.3)
-eda-bundle-core-25-4-3_SKIP=1
-eda-bundle-apps-25-4-3_SKIP=1
-eda-bundle-core-25-4-2_SKIP=1
-eda-bundle-apps-25-4-2_SKIP=1
-eda-bundle-connect-3-0-1_SKIP=1
-eda-bundle-core-25-4-1_SKIP=1
-eda-bundle-apps-25-4-1_SKIP=1
 eda-bundle-core-24-12-4_SKIP=1
 eda-bundle-core-24-12-2_SKIP=1
+SKIP_CORE_25_8_X=1
+SKIP_CORE_25_4_X=1
 else ifeq ($(EDA_CORE_REL),24.12.2)
-eda-bundle-core-25-4-3_SKIP=1
-eda-bundle-apps-25-4-3_SKIP=1
-eda-bundle-core-25-4-2_SKIP=1
-eda-bundle-apps-25-4-2_SKIP=1
-eda-bundle-connect-3-0-1_SKIP=1
-eda-bundle-core-25-4-1_SKIP=1
-eda-bundle-apps-25-4-1_SKIP=1
 eda-bundle-core-24-12-4_SKIP=1
 eda-bundle-core-24-12-3_SKIP=1
+SKIP_CORE_25_8_X=1
+SKIP_CORE_25_4_X=1
 else
 $(error [ERROR] EDA_CORE_REL=$(EDA_CORE_REL) is set to an invalid version!)
 endif
+
+ifeq ($(SKIP_CORE_25_8_X),1)
+eda-bundle-core-25-8-1_SKIP=1
+endif
+
+ifeq ($(SKIP_CORE_25_4_X),1)
+eda-bundle-core-25-4-3_SKIP=1
+eda-bundle-core-25-4-2_SKIP=1
+eda-bundle-core-25-4-1_SKIP=1
+endif
+
+ifeq ($(SKIP_CORE_24_12_X),1)
+eda-bundle-core-24-12-4_SKIP=1
+eda-bundle-core-24-12-3_SKIP=1
+eda-bundle-core-24-12-2_SKIP=1
+endif
+
 
 # Optional bundles to skip the default list
 # eda-bundle-sim-ghcr-srlinux-24-10-1-492_SKIP=1
@@ -182,7 +201,7 @@ endef
 
 define download-bin
     $(info --> INFO: Downloading $(2))
-	if test ! -f $(1); then $(CURL) -Lo $(1) $(2) >/dev/null && chmod a+x $(1); fi
+	if test ! -f $(1); then $(CURL) -o $(1) $(2) >/dev/null && chmod a+x $(1); fi
 endef
 
 define gen-targets
@@ -338,7 +357,7 @@ download-talos-stock-boot-media: | $(EDAADM)
 				filename=$$(echo "$$url" | rev | cut -f1 -d '/' | rev)						;\
 				output=$${output_to}/$${filename}											;\
 				echo "    To: $${output}"													;\
-				curl --fail --progress-bar $${url} --output $${output} | sed 's/^/    /'	;\
+				$(CURL_PM) $${url} --output $${output}										;\
 			done																			;\
 		done																				;\
 	}
