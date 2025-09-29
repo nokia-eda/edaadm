@@ -9,3 +9,7 @@ data:
   15-webdav.conf: |-
     server.modules += ("mod_webdav")
     webdav.activate = "enable"
+  15-listen-ipv6.conf: |-
+    # listen to IPv6
+    $SERVER["socket"] == "[::]:80" {  }
+

@@ -45,3 +45,7 @@ spec:
             - mountPath: "/etc/lighttpd/conf.d/15-webdav.conf"
               name: lighttpd-config-volume
               subPath: 15-webdav.conf
+            - mountPath: "/etc/lighttpd/conf.d/15-listen-ipv6.conf"
+              name: lighttpd-config-volume
+              subPath: 15-listen-ipv6.conf
+

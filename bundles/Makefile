@@ -56,7 +56,7 @@ TALOS_IMAGER_IMG ?= ghcr.io/siderolabs/imager:v1.9.2
 # This is the parent directory where we store/load everything for this Makefile
 OUTPUT_DIR ?= $(TOP_DIR)/eda-cargo
 
-EDA_CORE_REL ?= 25.8.1
+EDA_CORE_REL ?= 25.8.2
 
 # This is the name of files without the yaml extension
 # We could have used a find expression, but best to
@@ -70,6 +70,7 @@ BUNDLE_LIST += eda-bundle-apps-25-4-1
 BUNDLE_LIST += eda-bundle-apps-25-4-2
 BUNDLE_LIST += eda-bundle-apps-25-4-3
 BUNDLE_LIST += eda-bundle-apps-25-8-1
+BUNDLE_LIST += eda-bundle-apps-25-8-2
 BUNDLE_LIST += eda-bundle-connect-2-0-0
 BUNDLE_LIST += eda-bundle-connect-2-0-1
 BUNDLE_LIST += eda-bundle-connect-3-0-0
@@ -82,6 +83,7 @@ BUNDLE_LIST += eda-bundle-core-25-4-1
 BUNDLE_LIST += eda-bundle-core-25-4-2
 BUNDLE_LIST += eda-bundle-core-25-4-3
 BUNDLE_LIST += eda-bundle-core-25-8-1
+BUNDLE_LIST += eda-bundle-core-25-8-2
 BUNDLE_LIST += eda-bundle-influxdb-exporter-1-0-0
 BUNDLE_LIST += eda-bundle-kafka-exporter-2-0-1
 BUNDLE_LIST += eda-bundle-kafka-exporter-3-0-0
@@ -95,14 +97,17 @@ BUNDLE_LIST += eda-bundle-notifier-2-0-0
 BUNDLE_LIST += eda-bundle-notifier-3-0-0
 BUNDLE_LIST += eda-bundle-notifier-4-0-0
 BUNDLE_LIST += eda-bundle-otlp-exporter-1-0-0
+BUNDLE_LIST += eda-bundle-otlp-exporter-1-1-0
 BUNDLE_LIST += eda-bundle-pager-duty-1-0-0
 BUNDLE_LIST += eda-bundle-pager-duty-2-0-0
 BUNDLE_LIST += eda-bundle-pager-duty-3-0-0
 BUNDLE_LIST += eda-bundle-prom-exporter-2-0-0
 BUNDLE_LIST += eda-bundle-prom-exporter-3-0-0
 BUNDLE_LIST += eda-bundle-prom-exporter-4-0-0
+BUNDLE_LIST += eda-bundle-prom-exporter-4-1-0
 BUNDLE_LIST += eda-bundle-remote-write-1-0-0
 BUNDLE_LIST += eda-bundle-remote-write-2-0-0
+BUNDLE_LIST += eda-bundle-remote-write-2-1-0
 BUNDLE_LIST += eda-bundle-service-now-1-0-0
 BUNDLE_LIST += eda-bundle-service-now-2-0-0
 BUNDLE_LIST += eda-bundle-service-now-3-0-0
@@ -113,13 +118,17 @@ BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-4-244
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-5-344
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-3-2-312
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-7-1-187
+BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-7-2-266
 BUNDLE_LIST += eda-bundle-talos-1-9-2
 BUNDLE_LIST += eda-bundle-tools-1-0-0
 # Run this last
 BUNDLE_LIST += eda-bundle-storage-1-0-0
 
 # Skip core bundles based on the selected release
-ifeq ($(EDA_CORE_REL),25.8.1)
+ifeq ($(EDA_CORE_REL),25.8.2)
+SKIP_CORE_25_4_X=1
+SKIP_CORE_24_12_X=1
+else ifeq ($(EDA_CORE_REL),25.8.1)
 SKIP_CORE_25_4_X=1
 SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_REL),25.4.3)
