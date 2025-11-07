@@ -56,7 +56,7 @@ TALOS_IMAGER_IMG ?= ghcr.io/siderolabs/imager:v1.9.2
 # This is the parent directory where we store/load everything for this Makefile
 OUTPUT_DIR ?= $(TOP_DIR)/eda-cargo
 
-EDA_CORE_REL ?= 25.8.2
+EDA_CORE_REL ?= 25.8.3
 
 # This is the name of files without the yaml extension
 # We could have used a find expression, but best to
@@ -71,6 +71,7 @@ BUNDLE_LIST += eda-bundle-apps-25-4-2
 BUNDLE_LIST += eda-bundle-apps-25-4-3
 BUNDLE_LIST += eda-bundle-apps-25-8-1
 BUNDLE_LIST += eda-bundle-apps-25-8-2
+BUNDLE_LIST += eda-bundle-apps-25-8-3
 BUNDLE_LIST += eda-bundle-connect-2-0-0
 BUNDLE_LIST += eda-bundle-connect-2-0-1
 BUNDLE_LIST += eda-bundle-connect-3-0-0
@@ -84,6 +85,7 @@ BUNDLE_LIST += eda-bundle-core-25-4-2
 BUNDLE_LIST += eda-bundle-core-25-4-3
 BUNDLE_LIST += eda-bundle-core-25-8-1
 BUNDLE_LIST += eda-bundle-core-25-8-2
+BUNDLE_LIST += eda-bundle-core-25-8-3
 BUNDLE_LIST += eda-bundle-influxdb-exporter-1-0-0
 BUNDLE_LIST += eda-bundle-kafka-exporter-2-0-1
 BUNDLE_LIST += eda-bundle-kafka-exporter-3-0-0
@@ -125,10 +127,19 @@ BUNDLE_LIST += eda-bundle-tools-1-0-0
 BUNDLE_LIST += eda-bundle-storage-1-0-0
 
 # Skip core bundles based on the selected release
-ifeq ($(EDA_CORE_REL),25.8.2)
+ifeq ($(EDA_CORE_REL),25.8.3)
+eda-bundle-core-25-8-2_SKIP=1
+eda-bundle-core-25-8-1_SKIP=1
+SKIP_CORE_25_4_X=1
+SKIP_CORE_24_12_X=1
+else ifeq ($(EDA_CORE_REL),25.8.2)
+eda-bundle-core-25-8-3_SKIP=1
+eda-bundle-core-25-8-1_SKIP=1
 SKIP_CORE_25_4_X=1
 SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_REL),25.8.1)
+eda-bundle-core-25-8-3_SKIP=1
+eda-bundle-core-25-8-2_SKIP=1
 SKIP_CORE_25_4_X=1
 SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_REL),25.4.3)
@@ -166,6 +177,8 @@ $(error [ERROR] EDA_CORE_REL=$(EDA_CORE_REL) is set to an invalid version!)
 endif
 
 ifeq ($(SKIP_CORE_25_8_X),1)
+eda-bundle-core-25-8-3_SKIP=1
+eda-bundle-core-25-8-2_SKIP=1
 eda-bundle-core-25-8-1_SKIP=1
 endif
 
@@ -174,6 +187,7 @@ eda-bundle-core-25-4-3_SKIP=1
 eda-bundle-core-25-4-2_SKIP=1
 eda-bundle-core-25-4-1_SKIP=1
 endif
+
 
 ifeq ($(SKIP_CORE_24_12_X),1)
 eda-bundle-core-24-12-4_SKIP=1

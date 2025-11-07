@@ -1,0 +1,204 @@
+version: 1.0.0
+name: apps-25.8.3
+assets:
+  registries:
+    - name: ghcr.io
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1gyUnlUbEY0YjIxbGEyRkNhMlZJTmpGME9XaEpPVk5rTTAxVGFETXhkVEZGVVRGU2VBPT0K
+      images:
+        - name: nokia-eda/apps/aaa
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/aifabrics
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/bootstrap
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/components
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/config
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/demo
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/environment
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/fabrics
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/filters
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/interfaces
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/logs
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/oam
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/operatingsystem
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/protocols
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/qos
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/routing
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/routingpolicies
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/security
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/services
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/siteinfo
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/system
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/timing
+          format: oci
+          tags:
+            - v4.0.2
+        - name: nokia-eda/apps/topologies
+          format: oci
+          tags:
+            - v4.0.2
+        # Workflows
+        - name: nokia-eda/workflows/workflow-demo-interfacebounce
+          tags:
+            - v4.0.2
+        - name: nokia-eda/workflows/workflow-demo-interfaceupcheck
+          tags:
+            - v4.0.2
+        - name: nokia-eda/workflows/workflow-environment-cliplugin
+          tags:
+            - v4.0.2
+        - name: nokia-eda/workflows/workflow-environment-env
+          tags:
+            - v4.0.2
+        - name: nokia-eda/workflows/workflow-fabrics-islping
+          tags:
+            - v4.0.2
+        - name: nokia-eda/workflows/workflow-interfaces-checkinterfaces
+          tags:
+            - v4.0.2
+        - name: nokia-eda/workflows/workflow-oam-ping
+          tags:
+            - v4.0.2
+        - name: nokia-eda/workflows/workflow-oam-techsupport
+          tags:
+            - v4.0.2
+        - name: nokia-eda/workflows/workflow-operatingsystem-image
+          tags:
+            - v4.0.2
+        - name: nokia-eda/workflows/workflow-protocols-checkdefaultbgppeers
+          tags:
+            - v4.0.2
+        - name: nokia-eda/workflows/workflow-routing-attachmentlookup
+          tags:
+            - v4.0.2
+        - name: nokia-eda/workflows/workflow-routing-routelookup
+          tags:
+            - v4.0.2
+        - name: nokia-eda/workflows/workflow-services-edgeping
+          tags:
+            - v4.0.2
+  artifacts:
+    # SRL Schema Profiles
+    - name: srlinux-24.10.1-492.zip
+      url: https://github.com/nokia/srlinux-yang-models/releases/download/v24.10.1/srlinux-24.10.1-492.zip
+    - name: srlinux-24.10.2-357.zip
+      url: https://github.com/nokia/srlinux-yang-models/releases/download/v24.10.2/srlinux-24.10.2-357.zip
+    - name: srlinux-24.10.3-201.zip
+      url: https://github.com/nokia/srlinux-yang-models/releases/download/v24.10.3/srlinux-24.10.3-201.zip
+    - name: srlinux-24.10.4-244-v2.zip
+      url: https://github.com/nokia-eda/schema-profiles/releases/download/nokia-srl-24.10.4/srlinux-24.10.4-244-v2.zip
+    - name: srlinux-24.10.5-344.zip
+      url: https://github.com/nokia-eda/schema-profiles/releases/download/nokia-srl-24.10.5/srlinux-24.10.5-344.zip
+    - name: srlinux-25.3.2-312.zip
+      url: https://github.com/nokia-eda/schema-profiles/releases/download/nokia-srl-25.3.2/srlinux-25.3.2-312.zip
+    - name: srlinux-25.3.3-158.zip
+      url: https://github.com/nokia-eda/schema-profiles/releases/download/nokia-srl-25.3.3/srlinux-25.3.3-158.zip
+    - name: srlinux-25.7.1-180.zip
+      url: https://github.com/nokia-eda/schema-profiles/releases/download/nokia-srl-25.7.1/srlinux-25.7.1-180.zip
+    - name: srlinux-25.7.1-187.zip
+      url: https://github.com/nokia-eda/schema-profiles/releases/download/nokia-srl-25.7.1/srlinux-25.7.1-187.zip
+    - name: srlinux-25.7.2-266.zip
+      url: https://github.com/nokia-eda/schema-profiles/releases/download/nokia-srl-25.7.2/srlinux-25.7.2-266.zip
+    # SROS Schema profiles
+    - name: sros-24.10.r4.zip
+      url: https://github.com/nokia-eda/schema-profiles/releases/download/nokia-sros-v24.10.r4/sros-24.10.r4.zip
+    - name: sros-24.10.r5.zip
+      url: https://github.com/nokia-eda/schema-profiles/releases/download/nokia-sros-v24.10.r5/sros-24.10.r5.zip
+    - name: sros-24.10.r6.zip
+      url: https://github.com/nokia-eda/schema-profiles/releases/download/nokia-sros-v24.10.r6/sros-24.10.r6.zip
+    - name: sros-25.3.r2.zip
+      url: https://github.com/nokia-eda/schema-profiles/releases/download/nokia-sros-v25.3.r2/sros-25.3.r2.zip
+    - name: sros-25.7.r1.zip
+      url: https://github.com/nokia-eda/schema-profiles/releases/download/nokia-sros-v25.7.r1/sros-25.7.r1.zip
+    # LLM Embeddings
+    - name: llm-embeddings-srl-24-10-1.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-srl-v24.10.1/llm-embeddings-srl-24-10-1.tar.gz
+    - name: llm-embeddings-srl-24-10-2-v2.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-srl-v24.10.2/llm-embeddings-srl-24-10-2-v2.tar.gz
+    - name: llm-embeddings-srl-24-10-3.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-srl-v24.10.3/llm-embeddings-srl-24-10-3.tar.gz
+    - name: llm-embeddings-srl-24-10-4.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-srl-v24.10.4/llm-embeddings-srl-24-10-4.tar.gz
+    - name: llm-embeddings-srl-24-10-5-v1.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-srl-v24.10.5/llm-embeddings-srl-24-10-5-v1.tar.gz
+    - name: llm-embeddings-srl-25-3-2.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-srl-25.3.2/llm-embeddings-srl-25-3-2.tar.gz
+    - name: llm-embeddings-srl-25-3-3.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-srl-25.3.3/llm-embeddings-srl-25-3-3.tar.gz
+    - name: llm-embeddings-srl-25-7-1-v1.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-srl-25.7.1/llm-embeddings-srl-25-7-1-v1.tar.gz
+    - name: llm-embeddings-srl-25-7-2-v1.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-srl-25.7.2/llm-embeddings-srl-25-7-2-v1.tar.gz
+    - name: llm-embeddings-sros-24-10-r4.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-sros-v24.10.r4/llm-embeddings-sros-24-10-r4.tar.gz
+    - name: llm-embeddings-sros-24-10-r5-v1.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-sros-v24.10.r5/llm-embeddings-sros-24-10-r5-v1.tar.gz
+    - name: llm-embeddings-sros-24-10-r6-v1.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-sros-v24.10.r6/llm-embeddings-sros-24-10-r6-v1.tar.gz
+    - name: llm-embeddings-sros-25-3-r2.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-sros-v25.3.r2/llm-embeddings-sros-25-3-r2.tar.gz
+    - name: llm-embeddings-sros-25-7-r1-v1.tar.gz
+      url: https://github.com/nokia-eda/llm-embeddings/releases/download/nokia-sros-25.7.r1/llm-embeddings-sros-25-7-r1-v1.tar.gz

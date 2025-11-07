@@ -19,6 +19,8 @@ assets:
       url: https://get.helm.sh/helm-v3.17.0-linux-amd64.tar.gz
     - name: edaadm-v2.0.0
       url: https://github.com/nokia-eda/edaadm/releases/download/v2.0.0/edaadm-linux-amd64
+    - name: edaadm-v2.1.0
+      url: https://github.com/nokia-eda/edaadm/releases/download/v2.1.0/edaadm-linux-amd64
     - name: yq-v4.42.1
       url: https://github.com/mikefarah/yq/releases/download/v4.42.1/yq_linux_amd64
     - name: k9s-v0.32.5.tar.gz
