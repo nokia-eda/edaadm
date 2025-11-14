@@ -26,7 +26,7 @@ UNAME := $(shell uname)
 # Lowercase - sane version
 OS := $(shell echo "$(UNAME)" | tr '[:upper:]' '[:lower:]')
 
-EDAADM_VERSION ?= v2.2.0
+EDAADM_VERSION ?= v2.3.0
 EDAADM_SRC ?= https://github.com/nokia-eda/edaadm/releases/download/$(EDAADM_VERSION)/edaadm-$(OS)-$(ARCH)
 
 # Fake location to force the user to provide it

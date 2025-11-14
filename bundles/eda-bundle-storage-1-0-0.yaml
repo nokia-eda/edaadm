@@ -4,18 +4,6 @@ assets:
   registries:
     - name: docker.io
       images:
-        - name: rancher/local-path-provisioner
-          platform: linux/amd64
-          tags:
-            - v0.0.30
-        - name: busybox
-          platform: linux/amd64
-          tags:
-            - latest
-        - name: library/busybox
-          platform: linux/amd64
-          tags:
-            - latest
         - name: rook/ceph
           platform: linux/amd64
           tags:

@@ -2,37 +2,28 @@ version: 2.0.0
 name: edaadm-image-cache-v2.0.0
 assets:
   registries:
-    - name: docker.io
-      images:
-        - name: busybox
-          tags:
-            - latest
-        - name: library/busybox
-          tags:
-            - latest
-        - name: rancher/local-path-provisioner
-          tags:
-            - v0.0.30
     - name: gcr.io
       images:
         - name: etcd-development/etcd
           tags:
             - v3.5.17
     - name: ghcr.io
-      auth:
-        extraEncodeCount: 1
-        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
-        password: WjJod1gyUnlUbEY0YjIxbGEyRkNhMlZJTmpGME9XaEpPVk5rTTAxVGFETXhkVEZGVVRGU2VBPT0K
       images:
+        - name: nokia-eda/adm/ext/busybox
+          tags:
+            - 1.36.1
+        - name: nokia-eda/adm/ext/rancher/local-path-provisioner
+          tags:
+            - v0.0.30
+        - name: nokia-eda/adm/ext/registry
+          tags:
+            - 2.8.3
         - name: nokia-eda/adm/gogs
           tags:
             - 0.13.0
         - name: nokia-eda/adm/lighthttpd
           tags:
             - 1.4.76
-        - name: nokia-eda/adm/registry
-          tags:
-            - 2.8.3
         - name: siderolabs/flannel
           tags:
             - v0.26.1

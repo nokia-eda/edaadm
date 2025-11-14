@@ -25,7 +25,7 @@ spec:
         runAsUser: 1000
       containers:
         - name: docker-registry
-          image: ghcr.io/nokia-eda/adm/registry:2.8.3
+          image: ghcr.io/nokia-eda/adm/ext/registry:2.8.3
           imagePullPolicy: IfNotPresent
           command:
             - /bin/registry

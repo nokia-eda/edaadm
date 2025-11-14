@@ -84,7 +84,7 @@ spec:
       serviceAccountName: local-path-provisioner-service-account
       containers:
         - name: local-path-provisioner
-          image: rancher/local-path-provisioner:v0.0.30
+          image: ghcr.io/nokia-eda/adm/ext/rancher/local-path-provisioner:v0.0.30
           imagePullPolicy: IfNotPresent
           command:
             - local-path-provisioner
@@ -153,5 +153,5 @@ data:
           effect: NoSchedule
       containers:
       - name: helper-pod
-        image: busybox
+        image: ghcr.io/nokia-eda/adm/ext/busybox:1.36.1
         imagePullPolicy: IfNotPresent
