@@ -26,7 +26,7 @@ UNAME := $(shell uname)
 # Lowercase - sane version
 OS := $(shell echo "$(UNAME)" | tr '[:upper:]' '[:lower:]')
 
-EDAADM_VERSION ?= v2.3.0
+EDAADM_VERSION ?= v3.0.0
 EDAADM_SRC ?= https://github.com/nokia-eda/edaadm/releases/download/$(EDAADM_VERSION)/edaadm-$(OS)-$(ARCH)
 
 # Fake location to force the user to provide it
@@ -51,12 +51,18 @@ CURL_PM ?= curl $(CURL_OPTS)
 # use the progress bar instead of the meter - does weird things in output if there are multiple redirects/hops
 CURL_PB ?= curl $(CURL_OPTS) --progress-bar
 
-TALOS_IMAGER_IMG ?= ghcr.io/siderolabs/imager:v1.9.2
+TALOS_IMAGER_IMG ?= ghcr.io/siderolabs/imager:v1.11.5
 
 # This is the parent directory where we store/load everything for this Makefile
 OUTPUT_DIR ?= $(TOP_DIR)/eda-cargo
 
-EDA_CORE_REL ?= 25.8.3
+ifdef EDA_CORE_REL
+$(error "[ERROR] Please use EDA_CORE_VERSION instead")
+endif
+
+EDA_CORE_VERSION ?= 25.8.3
+
+EDA_ASSETS_IMAGE_CACHE ?= $(TOP_DIR)/eda-assets-image-cache-3-0-0.yaml
 
 # This is the name of files without the yaml extension
 # We could have used a find expression, but best to
@@ -123,57 +129,63 @@ BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-7-1-187
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-7-2-266
 BUNDLE_LIST += eda-bundle-talos-1-9-2
 BUNDLE_LIST += eda-bundle-tools-1-0-0
+BUNDLE_LIST += eda-bundle-talos-1-11-5
+BUNDLE_LIST += eda-bundle-tools-2-0-0
 # Run this last
 BUNDLE_LIST += eda-bundle-storage-1-0-0
+BUNDLE_LIST += eda-bundle-storage-2-0-0
+
+eda-bundle-talos-1-9-2_SKIP=1
+eda-bundle-tools-1-0-0_SKIP=1
 
 # Skip core bundles based on the selected release
-ifeq ($(EDA_CORE_REL),25.8.3)
+ifeq ($(EDA_CORE_VERSION),25.8.3)
 eda-bundle-core-25-8-2_SKIP=1
 eda-bundle-core-25-8-1_SKIP=1
 SKIP_CORE_25_4_X=1
 SKIP_CORE_24_12_X=1
-else ifeq ($(EDA_CORE_REL),25.8.2)
+else ifeq ($(EDA_CORE_VERSION),25.8.2)
 eda-bundle-core-25-8-3_SKIP=1
 eda-bundle-core-25-8-1_SKIP=1
 SKIP_CORE_25_4_X=1
 SKIP_CORE_24_12_X=1
-else ifeq ($(EDA_CORE_REL),25.8.1)
+else ifeq ($(EDA_CORE_VERSION),25.8.1)
 eda-bundle-core-25-8-3_SKIP=1
 eda-bundle-core-25-8-2_SKIP=1
 SKIP_CORE_25_4_X=1
 SKIP_CORE_24_12_X=1
-else ifeq ($(EDA_CORE_REL),25.4.3)
+else ifeq ($(EDA_CORE_VERSION),25.4.3)
 eda-bundle-core-25-4-2_SKIP=1
 eda-bundle-core-25-4-1_SKIP=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_24_12_X=1
-else ifeq ($(EDA_CORE_REL),25.4.2)
+else ifeq ($(EDA_CORE_VERSION),25.4.2)
 eda-bundle-core-25-4-3_SKIP=1
 eda-bundle-core-25-4-1_SKIP=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_24_12_X=1
-else ifeq ($(EDA_CORE_REL),25.4.1)
+else ifeq ($(EDA_CORE_VERSION),25.4.1)
 eda-bundle-core-25-4-3_SKIP=1
 eda-bundle-core-25-4-2_SKIP=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_24_12_X=1
-else ifeq ($(EDA_CORE_REL),24.12.4)
+else ifeq ($(EDA_CORE_VERSION),24.12.4)
 eda-bundle-core-24-12-3_SKIP=1
 eda-bundle-core-24-12-2_SKIP=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
-else ifeq ($(EDA_CORE_REL),24.12.3)
+else ifeq ($(EDA_CORE_VERSION),24.12.3)
 eda-bundle-core-24-12-4_SKIP=1
 eda-bundle-core-24-12-2_SKIP=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
-else ifeq ($(EDA_CORE_REL),24.12.2)
+else ifeq ($(EDA_CORE_VERSION),24.12.2)
 eda-bundle-core-24-12-4_SKIP=1
 eda-bundle-core-24-12-3_SKIP=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
 else
-$(error [ERROR] EDA_CORE_REL=$(EDA_CORE_REL) is set to an invalid version!)
+$(error [ERROR] EDA_CORE_VERSION=$(EDA_CORE_VERSION) is set to an invalid version!)
 endif
 
 ifeq ($(SKIP_CORE_25_8_X),1)
@@ -195,6 +207,8 @@ eda-bundle-core-24-12-3_SKIP=1
 eda-bundle-core-24-12-2_SKIP=1
 endif
 
+# Always skip the storage 1-0-0
+eda-bundle-storage-1-0-0_SKIP=1
 
 # Optional bundles to skip the default list
 # eda-bundle-sim-ghcr-srlinux-24-10-1-492_SKIP=1
@@ -297,7 +311,7 @@ create-assets-host-bootstrap-image-cache: | $(OUTPUT_DIR) $(EDAADM)
 	@{	\
 		$(EDAADM) bundle cache-create								 \
 		--output-cache-path $(OUTPUT_DIR)/eda-assets-image-cache	 \
-		--assets $(TOP_DIR)/eda-assets-image-cache.yaml				;\
+		--assets $(EDA_ASSETS_IMAGE_CACHE)							;\
 	}
 
 .PHONY: does-image-cache-exist
@@ -318,9 +332,12 @@ pull-talos-imager-container: ## Pull the image for talos imager to create iso's
 .PHONY: create-asset-vm-metal-boot-iso
 create-asset-vm-metal-boot-iso: | $(OUTPUT_DIR) pull-talos-imager-container does-image-cache-exist ## Create the bare-metal iso for the asset-hoster
 	@{	\
-		to=$(OUTPUT_DIR)/talos-asset-vm-boot-imgs				;\
-		image_cache_loc=$(OUTPUT_DIR)/eda-assets-image-cache	;\
-		mkdir -p $(OUTPUT_DIR)/talos-asset-vm-boot-imgs			;\
+		to=$(OUTPUT_DIR)/talos-asset-vm-boot-imgs								;\
+		output_file_name=metal-amd64.iso										;\
+		output_file=$${to}/$${output_file_name}									;\
+		rename_file=$${to}/asset-vm-$${output_file_name}						;\
+		image_cache_loc=$(OUTPUT_DIR)/eda-assets-image-cache					;\
+		mkdir -p $(OUTPUT_DIR)/talos-asset-vm-boot-imgs							;\
 		docker run \
 		--rm -t \
 		-v $${to}:/secureboot:ro \
@@ -330,14 +347,19 @@ create-asset-vm-metal-boot-iso: | $(OUTPUT_DIR) pull-talos-imager-container does
 		--privileged \
 		$(TALOS_IMAGER_IMG) \
 		iso --image-cache /image-cache.oci --extra-kernel-arg net.ifnames=0 --extra-kernel-arg=-console --extra-kernel-arg=console=ttyS0 ;\
+		\mv -fv $${output_file} $${rename_file}									;\
+		echo "--> INFO: Created $$(readlink -f $${rename_file})"				;\
 	}
 
 .PHONY: create-asset-vm-nocloud-boot-iso
 create-asset-vm-nocloud-boot-iso: | $(OUTPUT_DIR) pull-talos-imager-container does-image-cache-exist ## Create the nocloud iso for the asset-hoster
 	@{	\
-		to=$(OUTPUT_DIR)/talos-asset-vm-boot-imgs				;\
-		image_cache_loc=$(OUTPUT_DIR)/eda-assets-image-cache	;\
-		mkdir -p $(OUTPUT_DIR)/talos-asset-vm-boot-imgs			;\
+		to=$(OUTPUT_DIR)/talos-asset-vm-boot-imgs								;\
+		output_file_name=nocloud-amd64.iso										;\
+		output_file=$${to}/$${output_file_name}									;\
+		rename_file=$${to}/asset-vm-$${output_file_name}						;\
+		image_cache_loc=$(OUTPUT_DIR)/eda-assets-image-cache					;\
+		mkdir -p $(OUTPUT_DIR)/talos-asset-vm-boot-imgs							;\
 		docker run \
 		--rm -t \
 		-v $${to}:/secureboot:ro \
@@ -347,14 +369,19 @@ create-asset-vm-nocloud-boot-iso: | $(OUTPUT_DIR) pull-talos-imager-container do
 		--privileged \
 		$(TALOS_IMAGER_IMG) \
 		iso --image-cache /image-cache.oci --image-disk-size=2GiB --platform nocloud ;\
+		\mv -fv $${output_file} $${rename_file}									;\
+		echo "--> INFO: Created $$(readlink -f $${rename_file})"				;\
 	}
 
 .PHONY: create-asset-vm-vmware-boot-ova
 create-asset-vm-vmware-boot-ova: | $(OUTPUT_DIR) pull-talos-imager-container does-image-cache-exist ## Create the vmware ova for the asset-hoster
 	@{	\
-		to=$(OUTPUT_DIR)/talos-asset-vm-boot-imgs				;\
-		image_cache_loc=$(OUTPUT_DIR)/eda-assets-image-cache	;\
-		mkdir -p $(OUTPUT_DIR)/talos-asset-vm-boot-imgs			;\
+		to=$(OUTPUT_DIR)/talos-asset-vm-boot-imgs								;\
+		output_file_name=vmware-amd64.ova										;\
+		output_file=$${to}/$${output_file_name}									;\
+		rename_file=$${to}/asset-vm-$${output_file_name}						;\
+		image_cache_loc=$(OUTPUT_DIR)/eda-assets-image-cache					;\
+		mkdir -p $(OUTPUT_DIR)/talos-asset-vm-boot-imgs							;\
 		docker run \
 		--rm -t \
 		-v $${to}:/secureboot:ro \
@@ -364,26 +391,34 @@ create-asset-vm-vmware-boot-ova: | $(OUTPUT_DIR) pull-talos-imager-container doe
 		--privileged \
 		$(TALOS_IMAGER_IMG) \
 		vmware --image-cache /image-cache.oci --image-disk-size=2GiB ;\
+		\mv -fv $${output_file} $${rename_file}									;\
+		echo "--> INFO: Created $$(readlink -f $${rename_file})"				;\
 	}
 
 .PHONY: download-talos-stock-boot-media
 download-talos-stock-boot-media: | $(EDAADM)
+ifdef USE_CURL_TO_DOWNLOAD
 	@{	\
-		output_to=$(OUTPUT_DIR)/talos-stock-boot-media										;\
-		mkdir -p $${output_to}																;\
-		mach_types=("vmware" "nocloud" "metal")												;\
-		for machine in $${mach_types[@]}; do												 \
-			echo "--> Downloading boot media for $${machine}"								;\
-			urls=$$($(EDAADM) images -t "$${machine}" | grep "^https://")					;\
-			for url in $$urls ; do															 \
-				echo "    From: $$url"														;\
-				filename=$$(echo "$$url" | rev | cut -f1 -d '/' | rev)						;\
-				output=$${output_to}/$${filename}											;\
-				echo "    To: $${output}"													;\
-				$(CURL_PM) $${url} --output $${output}										;\
-			done																			;\
-		done																				;\
+		output_to=$(OUTPUT_DIR)/talos-stock-boot-media							;\
+		mkdir -p $${output_to}													;\
+		mach_types=("vmware" "nocloud" "metal")									;\
+		for machine in $${mach_types[@]}; do									 \
+			echo "--> Downloading boot media for $${machine}"					;\
+			urls=$$($(EDAADM) images -t "$${machine}" | grep "^https://")		;\
+			for url in $$urls ; do												 \
+				echo "    From: $$url"											;\
+				filename=$$(echo "$$url" | rev | cut -f1 -d '/' | rev)			;\
+				output=$${output_to}/$${filename}								;\
+				echo "    To: $${output}"										;\
+				$(CURL_PM) $${url} --output $${output}							;\
+			done																;\
+		done																	;\
 	}
+else
+	@{ \
+		$(EDAADM) images -t all -s $(OUTPUT_DIR)/talos-stock-boot-media			;\
+	}
+endif
 
 ## Bulk targets
 ## ----------------------------------------------------------------------------| 
@@ -405,7 +440,7 @@ check-load-params:
 
 .PHONY: ls-bundles
 ls-bundles: | $(BASE) ; @ ## Show which bundle files are found
-	@echo "--> Default eda core version to load/save: EDA_CORE_REL=$(EDA_CORE_REL)"
+	@echo "--> Default eda core version to load/save: EDA_CORE_VERSION=$(EDA_CORE_VERSION)"
 	@echo "--> List of bundles:"
 	@echo "$(BUNDLE_LIST)" | tr ' ' '\n' | sort | sed 's/^/    |-> /'
 	@echo "--> Default list:"

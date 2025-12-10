@@ -1,0 +1,21 @@
+version: 2.0.0
+name: tools-2.0.0
+assets:
+  registries:
+    - name: ghcr.io
+      images:
+        - name: srl-labs/kpt-apply-setters
+          platform: linux/amd64
+          tags:
+            - 0.1.1
+  artifacts:
+    - name: kubectl-v1.34.1
+      url: https://dl.k8s.io/release/v1.34.1/bin/linux/amd64/kubectl
+    - name: kpt-v1.0.0-beta.57
+      url: https://github.com/GoogleContainerTools/kpt/releases/download/v1.0.0-beta.57/kpt_linux_amd64
+    - name: helm-v3.17.0.tar.gz
+      url: https://get.helm.sh/helm-v3.17.0-linux-amd64.tar.gz
+    - name: yq-v4.42.1
+      url: https://github.com/mikefarah/yq/releases/download/v4.42.1/yq_linux_amd64
+    - name: k9s-v0.50.16.tar.gz
+      url: https://github.com/derailed/k9s/releases/download/v0.50.16/k9s_Linux_amd64.tar.gz

@@ -1,0 +1,53 @@
+version: 1.0.0
+name: k8s-storage-v2.0.0
+assets:
+  registries:
+    - name: quay.io
+      images:
+        - name: rook/ceph # Available in docker.io as well, we are proactively referring the new registry
+          platform: linux/amd64
+          tags:
+            - v1.18.7
+        - name: cephcsi/ceph-csi-operator
+          platform: linux/amd64
+          tags:
+            - v0.4.1
+        - name: ceph/ceph
+          platform: linux/amd64
+          tags:
+            - v19.2.3
+        - name: cephcsi/cephcsi
+          platform: linux/amd64
+          tags:
+            - v3.15.0
+        - name: csiaddons/k8s-sidecar
+          platform: linux/amd64
+          tags:
+            - v0.13.0
+    - name: registry.k8s.io
+      images:
+        - name: sig-storage/csi-node-driver-registrar
+          platform: linux/amd64
+          tags:
+            - v2.13.0
+        - name: sig-storage/csi-provisioner
+          platform: linux/amd64
+          tags:
+            - v5.2.0
+        - name: sig-storage/csi-snapshotter
+          platform: linux/amd64
+          tags:
+            - v8.2.1
+        - name: sig-storage/csi-attacher
+          platform: linux/amd64
+          tags:
+            - v4.8.1
+        - name: sig-storage/csi-resizer
+          platform: linux/amd64
+          tags:
+            - v1.13.2
+  artifacts:
+    - name: rook-ceph-v1.18.7.tgz
+      url: https://charts.rook.io/release/rook-ceph-v1.18.7.tgz
+    - name: rook-ceph-cluster-v1.18.7.tgz
+      url: https://charts.rook.io/release/rook-ceph-cluster-v1.18.7.tgz

@@ -29,7 +29,7 @@
   * `OUTPUT_DIR`
     * Root dir where this `Makefile` load/save assets.
     * Default is `$(pwd)/eda-cargo`
-  * `EDA_CORE_REL` version of core to load/save by default.
+  * `EDA_CORE_VERSION` version of core to load/save by default.
     * `make ls-bundles` will show the default value, this is the latest released version.
 
 ---
@@ -37,17 +37,23 @@
 # Creating boot iso for the asset talos machine:
 
 To boot the asset vm in an airgapped/isolated environment which
-can then be used as a mirror for artifacts for a eda cluster, we
-need to prepare a boot iso/image for the given platform (nocloud/vmware) which not only boots the TALOS basic machine + also boots
-the k8s controlplane and the pod images required to run mirrors for a registry, git server, web-server
+can then be used as a mirror for artifacts for an Eda compute cluster.
+We need to prepare a boot iso/image for a given platform which bootstraps from within its boot media all resources:
+* The Talos basic machine pods
+* The k8s controlplane, CNI 
+* Pod images required for the eda-shipyard to run mirrors for a registry, git server, web-server
 
-1. Login to `ghcr.io` to access images using the token:
-   1. `docker login ghcr.io -u <username> -p <password>`
-2. Prepare the image cache `make create-assets-host-bootstrap-image-cache`
-3. Create the iso:
+1. Prepare the image cache `make create-assets-host-bootstrap-image-cache`
+2. Create the iso:
    1. `make create-asset-vm-metal-boot-iso`
    2. `make create-asset-vm-nocloud-boot-iso`
    3. `make create-asset-vm-vmware-boot-ova`
+
+> [!note]
+>
+> `EDA_ASSETS_IMAGE_CACHE` can be used to point to a bundle file for an older asset + shipyard combo.
+>
+> eg: `make create-assets-host-bootstrap-image-cache EDA_ASSETS_IMAGE_CACHE=eda-assets-image-cache-2-0-0.yaml` for Talos 1.9.2 + 2.x shipyard
 
 ---
 
@@ -70,7 +76,11 @@ edaadm images --mach-type vmware
 # metal
 edaadm images --mach-type metal --enable-console
 
-# curl/wget the above
+# all
+edaadm images --mach-type all # All mach types we support (see help for list)
+
+# use `-s <path>` to save the images to location
+edaadm images --mach-type metal --enable-console -s /tmp/
 ```
 
 ---

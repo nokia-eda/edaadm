@@ -1,0 +1,61 @@
+version: 3.0.0
+name: edaadm-image-cache-v3.0.0
+assets:
+  registries:
+    - name: gcr.io
+      images:
+        - name: etcd-development/etcd
+          tags:
+            - v3.6.5
+    - name: ghcr.io
+      images:
+        - name: nokia-eda/adm/ext/busybox
+          tags:
+            - 1.36.1
+        - name: nokia-eda/adm/ext/rancher/local-path-provisioner
+          tags:
+            - v0.0.30
+        - name: nokia-eda/adm/ext/registry
+          tags:
+            - 2.8.3
+        - name: nokia-eda/adm/gogs
+          tags:
+            - 0.13.0
+        - name: nokia-eda/adm/lighthttpd
+          tags:
+            - 1.4.76
+        - name: siderolabs/flannel
+          tags:
+            - v0.27.4
+        - name: siderolabs/installer
+          tags: 
+            - v1.11.5
+        - name: siderolabs/kubelet
+          tags:
+            - v1.34.1
+    - name: registry.k8s.io
+      images:
+        - name: coredns/coredns
+          tags:
+            - v1.12.4
+        - name: kube-apiserver
+          tags:
+            - v1.34.1
+        - name: kube-controller-manager
+          tags:
+            - v1.34.1
+        - name: kube-proxy
+          tags:
+            - v1.34.1
+        - name: kube-scheduler
+          tags: 
+            - v1.34.1
+        - name: pause
+          tags:
+            - 3.10
+        - name: ingress-nginx/controller
+          tags:
+            - v1.12.1
+        - name: ingress-nginx/kube-webhook-certgen
+          tags:
+            - v1.5.2
