@@ -19,3 +19,5 @@ assets:
       url: https://github.com/mikefarah/yq/releases/download/v4.42.1/yq_linux_amd64
     - name: k9s-v0.50.16.tar.gz
       url: https://github.com/derailed/k9s/releases/download/v0.50.16/k9s_Linux_amd64.tar.gz
+    - name: edaadm-v3.0.0
+      url: https://github.com/nokia-eda/edaadm/releases/download/v3.0.0/edaadm-linux-amd64

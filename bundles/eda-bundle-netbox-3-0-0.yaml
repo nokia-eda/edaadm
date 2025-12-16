@@ -1,0 +1,21 @@
+version: 1.0.0
+name: netbox-v3.0.0
+assets:
+  registries:
+    - name: ghcr.io
+      # tlsVerify: false
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1gyUnlUbEY0YjIxbGEyRkNhMlZJTmpGME9XaEpPVk5rTTAxVGFETXhkVEZGVVRGU2VBPT0K
+      images:
+        - name: nokia-eda/apps/netbox
+          format: oci
+          tags:
+            - v3.0.0
+        - name: nokia-eda/apps/netbox-controller
+          tags:
+            - v3.0.0
+        - name: nokia-eda/workflows/workflow-netbox-applyallocation
+          tags:
+            - v3.0.0

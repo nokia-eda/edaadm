@@ -1,0 +1,17 @@
+version: 1.0.0
+name: nats-exporter-v3.0.0
+assets:
+  registries:
+    - name: ghcr.io
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1gyUnlUbEY0YjIxbGEyRkNhMlZJTmpGME9XaEpPVk5rTTAxVGFETXhkVEZGVVRGU2VBPT0K
+      images:
+        - name: nokia-eda/nats-exporter
+          format: oci
+          tags:
+            - v3.0.0
+        - name: nokia-eda/nats-exporter-controller
+          tags:
+            - v3.0.0

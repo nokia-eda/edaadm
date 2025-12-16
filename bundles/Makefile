@@ -60,7 +60,7 @@ ifdef EDA_CORE_REL
 $(error "[ERROR] Please use EDA_CORE_VERSION instead")
 endif
 
-EDA_CORE_VERSION ?= 25.8.3
+EDA_CORE_VERSION ?= 25.12.1
 
 EDA_ASSETS_IMAGE_CACHE ?= $(TOP_DIR)/eda-assets-image-cache-3-0-0.yaml
 
@@ -78,11 +78,16 @@ BUNDLE_LIST += eda-bundle-apps-25-4-3
 BUNDLE_LIST += eda-bundle-apps-25-8-1
 BUNDLE_LIST += eda-bundle-apps-25-8-2
 BUNDLE_LIST += eda-bundle-apps-25-8-3
+BUNDLE_LIST += eda-bundle-apps-25-12-1
 BUNDLE_LIST += eda-bundle-connect-2-0-0
 BUNDLE_LIST += eda-bundle-connect-2-0-1
 BUNDLE_LIST += eda-bundle-connect-3-0-0
 BUNDLE_LIST += eda-bundle-connect-3-0-1
 BUNDLE_LIST += eda-bundle-connect-4-0-0
+BUNDLE_LIST += eda-bundle-connect-5-0-0
+BUNDLE_LIST += eda-bundle-connect-k8s-plugin-5-0-0
+BUNDLE_LIST += eda-bundle-connect-nutanix-0-0-1-beta
+BUNDLE_LIST += eda-bundle-connect-vmware-5-0-0
 BUNDLE_LIST += eda-bundle-core-24-12-2
 BUNDLE_LIST += eda-bundle-core-24-12-3
 BUNDLE_LIST += eda-bundle-core-24-12-4
@@ -92,41 +97,61 @@ BUNDLE_LIST += eda-bundle-core-25-4-3
 BUNDLE_LIST += eda-bundle-core-25-8-1
 BUNDLE_LIST += eda-bundle-core-25-8-2
 BUNDLE_LIST += eda-bundle-core-25-8-3
+BUNDLE_LIST += eda-bundle-core-25-12-1
+BUNDLE_LIST += eda-bundle-github-1-0-0
+BUNDLE_LIST += eda-bundle-gitlab-1-0-0
 BUNDLE_LIST += eda-bundle-influxdb-exporter-1-0-0
+BUNDLE_LIST += eda-bundle-influxdb-exporter-2-0-0
 BUNDLE_LIST += eda-bundle-kafka-exporter-2-0-1
 BUNDLE_LIST += eda-bundle-kafka-exporter-3-0-0
 BUNDLE_LIST += eda-bundle-kafka-exporter-4-0-0
+BUNDLE_LIST += eda-bundle-kafka-exporter-5-0-0
+BUNDLE_LIST += eda-bundle-kafka-importer-1-0-0
 BUNDLE_LIST += eda-bundle-metallb-0-13-7
 BUNDLE_LIST += eda-bundle-nats-exporter-1-0-0
 BUNDLE_LIST += eda-bundle-nats-exporter-2-0-0
+BUNDLE_LIST += eda-bundle-nats-exporter-3-0-0
 BUNDLE_LIST += eda-bundle-netbox-1-0-0
 BUNDLE_LIST += eda-bundle-netbox-2-0-0
+BUNDLE_LIST += eda-bundle-netbox-3-0-0
 BUNDLE_LIST += eda-bundle-notifier-2-0-0
 BUNDLE_LIST += eda-bundle-notifier-3-0-0
 BUNDLE_LIST += eda-bundle-notifier-4-0-0
+BUNDLE_LIST += eda-bundle-notifier-5-0-0
 BUNDLE_LIST += eda-bundle-otlp-exporter-1-0-0
 BUNDLE_LIST += eda-bundle-otlp-exporter-1-1-0
+BUNDLE_LIST += eda-bundle-otlp-exporter-2-0-0
 BUNDLE_LIST += eda-bundle-pager-duty-1-0-0
 BUNDLE_LIST += eda-bundle-pager-duty-2-0-0
 BUNDLE_LIST += eda-bundle-pager-duty-3-0-0
+BUNDLE_LIST += eda-bundle-pager-duty-4-0-0
 BUNDLE_LIST += eda-bundle-prom-exporter-2-0-0
 BUNDLE_LIST += eda-bundle-prom-exporter-3-0-0
 BUNDLE_LIST += eda-bundle-prom-exporter-4-0-0
 BUNDLE_LIST += eda-bundle-prom-exporter-4-1-0
+BUNDLE_LIST += eda-bundle-prom-exporter-5-0-0
 BUNDLE_LIST += eda-bundle-remote-write-1-0-0
 BUNDLE_LIST += eda-bundle-remote-write-2-0-0
 BUNDLE_LIST += eda-bundle-remote-write-2-1-0
+BUNDLE_LIST += eda-bundle-remote-write-3-0-0
 BUNDLE_LIST += eda-bundle-service-now-1-0-0
 BUNDLE_LIST += eda-bundle-service-now-2-0-0
 BUNDLE_LIST += eda-bundle-service-now-3-0-0
+BUNDLE_LIST += eda-bundle-service-now-4-0-0
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-1-492
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-2-357
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-3-201
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-4-244
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-5-344
+BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-24-10-6-209
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-3-2-312
+BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-3-3-158
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-7-1-187
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-7-2-266
+BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-10-1-399
+BUNDLE_LIST += eda-bundle-snmp-traps-1-0-0
+BUNDLE_LIST += eda-bundle-snmp-traps-2-0-0
+BUNDLE_LIST += eda-bundle-stdout-exporter-1-0-0
 BUNDLE_LIST += eda-bundle-talos-1-9-2
 BUNDLE_LIST += eda-bundle-tools-1-0-0
 BUNDLE_LIST += eda-bundle-talos-1-11-5
@@ -135,57 +160,76 @@ BUNDLE_LIST += eda-bundle-tools-2-0-0
 BUNDLE_LIST += eda-bundle-storage-1-0-0
 BUNDLE_LIST += eda-bundle-storage-2-0-0
 
+# Skip bundles related to Talos 1.9.2
 eda-bundle-talos-1-9-2_SKIP=1
 eda-bundle-tools-1-0-0_SKIP=1
+eda-bundle-storage-1-0-0_SKIP=1
 
 # Skip core bundles based on the selected release
-ifeq ($(EDA_CORE_VERSION),25.8.3)
+ifeq ($(EDA_CORE_VERSION),25.12.1)
+SKIP_CORE_25_8_X=1
+SKIP_CORE_25_4_X=1
+SKIP_CORE_24_12_X=1
+else ifeq ($(EDA_CORE_VERSION),25.8.3)
 eda-bundle-core-25-8-2_SKIP=1
 eda-bundle-core-25-8-1_SKIP=1
+SKIP_CORE_25_12_X=1
 SKIP_CORE_25_4_X=1
 SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_VERSION),25.8.2)
 eda-bundle-core-25-8-3_SKIP=1
 eda-bundle-core-25-8-1_SKIP=1
+SKIP_CORE_25_12_X=1
 SKIP_CORE_25_4_X=1
 SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_VERSION),25.8.1)
 eda-bundle-core-25-8-3_SKIP=1
 eda-bundle-core-25-8-2_SKIP=1
+SKIP_CORE_25_12_X=1
 SKIP_CORE_25_4_X=1
 SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_VERSION),25.4.3)
 eda-bundle-core-25-4-2_SKIP=1
 eda-bundle-core-25-4-1_SKIP=1
+SKIP_CORE_25_12_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_VERSION),25.4.2)
 eda-bundle-core-25-4-3_SKIP=1
 eda-bundle-core-25-4-1_SKIP=1
+SKIP_CORE_25_12_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_VERSION),25.4.1)
 eda-bundle-core-25-4-3_SKIP=1
 eda-bundle-core-25-4-2_SKIP=1
+SKIP_CORE_25_12_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_VERSION),24.12.4)
 eda-bundle-core-24-12-3_SKIP=1
 eda-bundle-core-24-12-2_SKIP=1
+SKIP_CORE_25_12_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
 else ifeq ($(EDA_CORE_VERSION),24.12.3)
 eda-bundle-core-24-12-4_SKIP=1
 eda-bundle-core-24-12-2_SKIP=1
+SKIP_CORE_25_12_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
 else ifeq ($(EDA_CORE_VERSION),24.12.2)
 eda-bundle-core-24-12-4_SKIP=1
 eda-bundle-core-24-12-3_SKIP=1
+SKIP_CORE_25_12_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
 else
 $(error [ERROR] EDA_CORE_VERSION=$(EDA_CORE_VERSION) is set to an invalid version!)
+endif
+
+ifeq ($(SKIP_CORE_25_12_X),1)
+eda-bundle-core-25-12-1_SKIP=1
 endif
 
 ifeq ($(SKIP_CORE_25_8_X),1)
@@ -200,15 +244,61 @@ eda-bundle-core-25-4-2_SKIP=1
 eda-bundle-core-25-4-1_SKIP=1
 endif
 
-
 ifeq ($(SKIP_CORE_24_12_X),1)
 eda-bundle-core-24-12-4_SKIP=1
 eda-bundle-core-24-12-3_SKIP=1
 eda-bundle-core-24-12-2_SKIP=1
 endif
 
-# Always skip the storage 1-0-0
-eda-bundle-storage-1-0-0_SKIP=1
+# Essential Apps skip selectors
+ifeq ($(SKIP_APPS_24_12),1)
+eda-bundle-apps-24-12-1_SKIP=1
+eda-bundle-apps-24-12-2_SKIP=1
+eda-bundle-apps-24-12-3_SKIP=1
+eda-bundle-apps-24-12-4_SKIP=1
+endif
+
+ifeq ($(SKIP_APPS_25_4),1)
+eda-bundle-apps-25-4-1_SKIP=1
+eda-bundle-apps-25-4-2_SKIP=1
+eda-bundle-apps-25-4-3_SKIP=1
+endif
+
+ifeq ($(SKIP_APPS_25_8),1)
+eda-bundle-apps-25-8-1_SKIP=1
+eda-bundle-apps-25-8-2_SKIP=1
+eda-bundle-apps-25-8-3_SKIP=1
+endif
+
+ifeq ($(SKIP_APPS_25_12),1)
+eda-bundle-apps-25-12-1_SKIP=1
+endif
+
+ifeq ($(SKIP_APPS_CONNECT),1)
+eda-bundle-connect-2-0-0_SKIP=1
+eda-bundle-connect-2-0-1_SKIP=1
+eda-bundle-connect-3-0-0_SKIP=1
+eda-bundle-connect-3-0-1_SKIP=1
+eda-bundle-connect-4-0-0_SKIP=1
+eda-bundle-connect-5-0-0_SKIP=1
+eda-bundle-connect-k8s-plugin-5-0-0_SKIP=1
+eda-bundle-connect-nutanix-0-0-1-beta_SKIP=1
+eda-bundle-connect-vmware-5-0-0_SKIP=1
+endif
+
+ifeq ($(SKIP_SIMS),1)
+eda-bundle-sim-ghcr-srlinux-24-10-1-492_SKIP=1
+eda-bundle-sim-ghcr-srlinux-24-10-2-357_SKIP=1
+eda-bundle-sim-ghcr-srlinux-24-10-3-201_SKIP=1
+eda-bundle-sim-ghcr-srlinux-24-10-4-244_SKIP=1
+eda-bundle-sim-ghcr-srlinux-24-10-5-344_SKIP=1
+eda-bundle-sim-ghcr-srlinux-24-10-6-209_SKIP=1
+eda-bundle-sim-ghcr-srlinux-25-3-2-312_SKIP=1
+eda-bundle-sim-ghcr-srlinux-25-3-3-158_SKIP=1
+eda-bundle-sim-ghcr-srlinux-25-7-1-187_SKIP=1
+eda-bundle-sim-ghcr-srlinux-25-7-2-266_SKIP=1
+eda-bundle-sim-ghcr-srlinux-25-10-1-399_SKIP=1
+endif
 
 # Optional bundles to skip the default list
 # eda-bundle-sim-ghcr-srlinux-24-10-1-492_SKIP=1

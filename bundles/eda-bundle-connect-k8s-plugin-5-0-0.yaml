@@ -1,0 +1,17 @@
+version: 1.0.0
+name: connect-k8s-plugin-5.0.0
+assets:
+  registries:
+    - name: ghcr.io
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1gyUnlUbEY0YjIxbGEyRkNhMlZJTmpGME9XaEpPVk5rTTAxVGFETXhkVEZGVVRGU2VBPT0K
+      images:
+        - name: nokia-eda/eda-connect-k8s-controller
+          format: oci
+          tags:
+            - 5.0.0
+  repos:
+    - remote: https://github.com/nokia-eda/connect-k8s-helm-charts.git
+      name: connect-k8s-helm-charts

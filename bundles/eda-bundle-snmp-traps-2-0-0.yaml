@@ -1,0 +1,17 @@
+version: 1.0.0
+name: snmp-traps-v2.0.0
+assets:
+  registries:
+    - name: ghcr.io
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1gyUnlUbEY0YjIxbGEyRkNhMlZJTmpGME9XaEpPVk5rTTAxVGFETXhkVEZGVVRGU2VBPT0K
+      images:
+        - name: nokia-eda/apps/snmp-traps
+          format: oci
+          tags:
+            - v2.0.0
+        - name: nokia-eda/apps/snmp-traps-controller
+          tags:
+            - v2.0.0
