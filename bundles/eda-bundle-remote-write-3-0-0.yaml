@@ -7,7 +7,7 @@ assets:
       auth:
         extraEncodeCount: 1
         username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
-        password: WjJod1gyUnlUbEY0YjIxbGEyRkNhMlZJTmpGME9XaEpPVk5rTTAxVGFETXhkVEZGVVRGU2VBPT0K
+        password: WjJod1gxb3dUSFJQWlZKQlFuVk1lVWh4TTFrek1IZEpUSGhJUjJzek5XMVFiREI2YzFoNk1nPT0K
       images:
         - name: nokia-eda/apps/remote-write
           format: oci
