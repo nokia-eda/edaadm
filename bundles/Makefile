@@ -153,6 +153,7 @@ BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-3-3-158
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-7-1-187
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-7-2-266
 BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-10-1-399
+BUNDLE_LIST += eda-bundle-sim-ghcr-srlinux-25-10-2-527
 BUNDLE_LIST += eda-bundle-snmp-traps-1-0-0
 BUNDLE_LIST += eda-bundle-snmp-traps-2-0-0
 BUNDLE_LIST += eda-bundle-stdout-exporter-1-0-0
@@ -318,6 +319,7 @@ eda-bundle-sim-ghcr-srlinux-25-3-3-158_SKIP=1
 eda-bundle-sim-ghcr-srlinux-25-7-1-187_SKIP=1
 eda-bundle-sim-ghcr-srlinux-25-7-2-266_SKIP=1
 eda-bundle-sim-ghcr-srlinux-25-10-1-399_SKIP=1
+eda-bundle-sim-ghcr-srlinux-25-10-2-527_SKIP=1
 endif
 
 # Optional bundles to skip the default list
