@@ -55,7 +55,7 @@ make ls-setters
 ```
 or
 ```shell
-kpt fn eval --image gcr.io/kpt-fn/list-setters:v0.1.0 --truncate-output=false |& grep -v -e '^\[RUNNING\].*$' -e'^\[PASS\].*$' -e'\ *Results\:.*$' | awk '{$1=$1;print}'
+kpt fn eval --image ghcr.io/nokia-eda/ext/kpt-fn/list-setters:v0.1.0 --truncate-output=false |& grep -v -e '^\[RUNNING\].*$' -e'^\[PASS\].*$' -e'\ *Results\:.*$' | awk '{$1=$1;print}'
 ```
 will list:
 ```yaml

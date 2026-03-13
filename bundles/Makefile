@@ -295,6 +295,9 @@ eda-bundle-apps-25-12-1_SKIP=1
 eda-bundle-apps-25-12-2_SKIP=1
 endif
 
+# Always skip it unless asked for set eda-bundle-connect-2-0-0_SKIP=0
+eda-bundle-connect-2-0-0_SKIP=1
+
 ifeq ($(SKIP_APPS_CONNECT),1)
 eda-bundle-connect-2-0-0_SKIP=1
 eda-bundle-connect-2-0-1_SKIP=1

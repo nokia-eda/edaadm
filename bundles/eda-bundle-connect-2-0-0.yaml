@@ -19,7 +19,7 @@ assets:
         - name: nokia-eda/eda-connect-k8s-controller
           tags:
             - v2.0.0
-    - name: gcr.io
+    - name: registry.k8s.io
       images:
         - name: kubebuilder/kube-rbac-proxy
           tags:
