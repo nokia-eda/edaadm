@@ -1,0 +1,18 @@
+version: 1.0.0
+name: soe-exporter-v1.0.1
+assets:
+  registries:
+    - name: ghcr.io
+      # tlsVerify: false
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1gxb3dUSFJQWlZKQlFuVk1lVWh4TTFrek1IZEpUSGhJUjJzek5XMVFiREI2YzFoNk1nPT0K
+      images:
+        - name: nokia-eda/apps/soe-exporter
+          format: oci
+          tags:
+            - v1.0.1
+        - name: nokia-eda/apps/soe-exporter-controller
+          tags:
+            - v1.0.1
