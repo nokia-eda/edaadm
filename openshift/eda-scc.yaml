@@ -8,7 +8,6 @@ metadata:
       any SELinux context.  WARNING: this is the most relaxed SCC and should be used
       only for cluster administration. Grant with caution.'
 allowHostDirVolumePlugin: true
-allowHostIPC: true
 allowHostNetwork: true
 allowHostPID: true
 allowHostPorts: true
@@ -43,7 +42,7 @@ users:
   - system:serviceaccount:metallb-system:speaker
   - system:serviceaccount:eda-system:default
   - system:serviceaccount:eda-system:fluent-bit
-  - system:serviceaccount:eda-system:fluent-operator
+  - system:serviceaccount:eda-system:logoutput-fluent-bit
   - system:serviceaccount:eda-system:cert-manager-csi-driver
   - system:serviceaccount:eda-system:eda-cert-checker
   - system:serviceaccount:eda-system:eda-ce

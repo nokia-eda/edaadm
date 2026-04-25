@@ -26,7 +26,7 @@ UNAME := $(shell uname)
 # Lowercase - sane version
 OS := $(shell echo "$(UNAME)" | tr '[:upper:]' '[:lower:]')
 
-EDAADM_VERSION ?= v3.0.0
+EDAADM_VERSION ?= v3.1.0
 EDAADM_SRC ?= https://github.com/nokia-eda/edaadm/releases/download/$(EDAADM_VERSION)/edaadm-$(OS)-$(ARCH)
 
 # Fake location to force the user to provide it
@@ -63,6 +63,11 @@ endif
 EDA_CORE_VERSION ?= 25.12.4
 
 EDA_ASSETS_IMAGE_CACHE ?= $(TOP_DIR)/eda-assets-image-cache-3-0-0.yaml
+
+B64_ASSET_HOST_REGISTRY_USERNAME ?= ""
+B64_ASSET_HOST_REGISTRY_PASSWORD ?= ""
+ASSET_HOST_GIT_SCHEME ?= https
+ASSET_HOST_ARITFACTS_SCHEME ?= https
 
 # This is the name of files without the yaml extension
 # We could have used a find expression, but best to
@@ -386,7 +391,7 @@ save-$1: | $(OUTPUT_DIR) $(EDAADM)
 		mkdir -p  $$$${to}					;\
 		$(EDAADM) bundle save				 \
 		-f $(TOP_DIR)/$1.yaml				 \
-		-t $$$${to} | sed 's/^/    /'		;\
+		-t $$$${to}							;\
 		echo "--> [SAVE] Saved to $$$${to}"	;\
 	}
 
@@ -396,25 +401,36 @@ endif
 .PHONY: load-$1
 load-$1: | $(OUTPUT_DIR) $(EDAADM) check-load-params
 	@{	\
-		echo "--> [LOAD] $1"							;\
-		from=$(OUTPUT_DIR)/$(1)							;\
-		if [[ ! -d $$$${from}  ]]; then 				 \
-			echo "[ERROR] $$$${from} does not exist!"	;\
-			echo "        did you run save-$(1) ?"		;\
-			exit 1										;\
-		fi 												;\
+		if [[ -z "$(ASSET_HOST)" ]]; then																								 \
+			export _ASSET_HOST_ARTIFACTS=$(ASSET_HOST_ARTIFACTS)																		;\
+			export _ASSET_HOST_GIT=$(ASSET_HOST_GIT)																					;\
+			export _ASSET_HOST_REGISTRY=$(ASSET_HOST_REGISTRY)																			;\
+		else																															 \
+			export _ASSET_HOST_ARTIFACTS="$(ASSET_HOST_ARITFACTS_SCHEME)://$(ASSET_HOST)/artifacts-upload"								;\
+			export _ASSET_HOST_GIT=$(ASSET_HOST_GIT_SCHEME)://$(ASSET_HOST)/git/$$$$(echo -n "$(B64_ASSET_HOST_GIT_USERNAME)" | base64 -d)	;\
+			export _ASSET_HOST_REGISTRY=$(ASSET_HOST)																					;\
+		fi																																;\
+		echo "--> [LOAD] $1"																											;\
+		from=$(OUTPUT_DIR)/$(1)																											;\
+		if [[ ! -d $$$${from}  ]]; then 																								 \
+			echo "[ERROR] $$$${from} does not exist!"																					;\
+			echo "        did you run save-$(1) ?"																						;\
+			exit 1																														;\
+		fi 																																;\
 		$(EDAADM) bundle load \
 		-f $(TOP_DIR)/$(1).yaml \
 		-l $$$${from} \
-		-r $(ASSET_HOST) \
+		--dest-registry $$$${_ASSET_HOST_REGISTRY} \
+		--dest-registry-user $(B64_ASSET_HOST_REGISTRY_USERNAME) \
+		--dest-registry-pass $(B64_ASSET_HOST_REGISTRY_PASSWORD) \
 		$(ARGS_INSECURE) \
-		--dest-artifactserver "http://$(ASSET_HOST)/artifacts-upload" \
-		--dest-artifactserver-user $(ASSET_HOST_ARTIFACTS_USERNAME) \
-		--dest-artifactserver-pass $(ASSET_HOST_ARTIFACTS_PASSWORD) \
-		--dest-reposerver http://$(ASSET_HOST)/git/$$$$(echo -n "$(ASSET_HOST_GIT_USERNAME)" | base64 -d) \
-		--dest-reposerver-user $(ASSET_HOST_GIT_USERNAME) \
-		--dest-reposerver-pass $(ASSET_HOST_GIT_PASSWORD) | sed 's/^/    /';\
-		echo "--> [LOAD] Loaded from $1"				;\
+		--dest-artifactserver "$$$${_ASSET_HOST_ARTIFACTS}" \
+		--dest-artifactserver-user $(B64_ASSET_HOST_ARTIFACTS_USERNAME) \
+		--dest-artifactserver-pass $(B64_ASSET_HOST_ARTIFACTS_PASSWORD) \
+		--dest-reposerver "$$$${_ASSET_HOST_GIT}" \
+		--dest-reposerver-user $(B64_ASSET_HOST_GIT_USERNAME)	 \
+		--dest-reposerver-pass $(B64_ASSET_HOST_GIT_PASSWORD)	;\
+		echo "--> [LOAD] Loaded from $1"					;\
 	}
 endef
 
@@ -564,11 +580,17 @@ load-all-bundles: | $(LIST_OF_LOAD_TARGETS)
 
 .PHONY: check-load-params
 check-load-params:
+ifndef ASSET_HOST
+	@$(call check-if-var-is-defined,ASSET_HOST_GIT)
+	@$(call check-if-var-is-defined,ASSET_HOST_REGISTRY)
+	@$(call check-if-var-is-defined,ASSET_HOST_ARTIFACTS)
+else
 	@$(call check-if-var-is-defined,ASSET_HOST)
-	@$(call check-if-var-is-defined,ASSET_HOST_GIT_USERNAME)
-	@$(call check-if-var-is-defined,ASSET_HOST_GIT_PASSWORD)
-	@$(call check-if-var-is-defined,ASSET_HOST_ARTIFACTS_USERNAME)
-	@$(call check-if-var-is-defined,ASSET_HOST_ARTIFACTS_PASSWORD)
+endif
+	@$(call check-if-var-is-defined,B64_ASSET_HOST_GIT_USERNAME)
+	@$(call check-if-var-is-defined,B64_ASSET_HOST_GIT_PASSWORD)
+	@$(call check-if-var-is-defined,B64_ASSET_HOST_ARTIFACTS_USERNAME)
+	@$(call check-if-var-is-defined,B64_ASSET_HOST_ARTIFACTS_PASSWORD)
 
 .PHONY: ls-bundles
 ls-bundles: | $(BASE) ; @ ## Show which bundle files are found

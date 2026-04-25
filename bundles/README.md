@@ -19,10 +19,23 @@
 * Required:
   * Only for load operations:
     * `ASSET_HOST` - Ingress ip: `kubectl -n eda-assets get ingresses.networking.k8s.io`
-    * `ASSET_HOST_GIT_USERNAME` - base64 encoded username
-    * `ASSET_HOST_GIT_PASSWORD` - base64 encoded password
-    * `ASSET_HOST_ARTIFACTS_USERNAME` - base64 encoded username
-    * `ASSET_HOST_ARTIFACTS_PASSWORD` - base64 encoded password
+    * `B64_ASSET_HOST_GIT_USERNAME` - base64 encoded username for the git server
+    * `B64_ASSET_HOST_GIT_PASSWORD` - base64 encoded password for the git server
+    * `B64_ASSET_HOST_ARTIFACTS_USERNAME` - base64 encoded username for the artifact host
+    * `B64_ASSET_HOST_ARTIFACTS_PASSWORD` - base64 encoded password for the artifact host
+    * `B64_ASSET_HOST_REGISTRY_USERNAME` - base64 encoded username for the container registry
+    * `B64_ASSET_HOST_REGISTRY_PASSWORD` - base64 encoded password for the container registry
+
+> If using a split asset-host then instead of specifying `ASSET_HOST` specify the following:
+> * `ASSET_HOST_REGISTRY` - path to reach container registry
+> * `ASSET_HOST_GIT` - url to reach the git server
+> * `ASSET_HOST_ARTIFACTS` - url to reach the artifact host server
+>
+> When `ASSET_HOST` is pointing to the eda provided asset-host the above are automatically set to its endpoints:
+> * `ASSET_HOST_REGISTRY=${ASSET_HOST}`
+> * `ASSET_HOST_GIT=https://${ASSET_HOST}/git/${ASSET_HOST_GIT_USERNAME}`
+> * `ASSET_HOST_ARTIFACTS=https://${ASSET_HOST}/artifacts-upload`
+
 * Optional:
   * `EDAADM` - path of the edaadm binary
     * If not specified it will downloaded from [github.com/nokia-eda/edaadm](https://github.com/nokia-eda/edaadm)
