@@ -1,0 +1,17 @@
+version: 1.0.0
+name: nats-importer-v1.0.0
+assets:
+  registries:
+    - name: ghcr.io
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1gxb3dUSFJQWlZKQlFuVk1lVWh4TTFrek1IZEpUSGhJUjJzek5XMVFiREI2YzFoNk1nPT0K
+      images:
+        - name: nokia-eda/apps/nats-importer
+          format: oci
+          tags:
+            - v1.0.0
+        - name: nokia-eda/apps/nats-importer-controller
+          tags:
+            - v1.0.0
