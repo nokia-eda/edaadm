@@ -2,6 +2,11 @@ version: 1.0.0
 name: core-26.4.1
 assets:
   registries:
+    - name: docker.io
+      images:
+        - name: coredns/coredns
+          tags:
+            - 1.12.1
     - name: ghcr.io
       auth:
         extraEncodeCount: 1
@@ -134,12 +139,6 @@ assets:
         - name: nokia-eda/core/eda-vcluster-plugin
           tags:
             - 26.4.1
-        - name: nokia-eda/ext/jetstack/trust-manager
-          tags:
-            - v0.20.3
-        - name: nokia-eda/ext/jetstack/trust-pkg-debian-bookworm
-          tags:
-            - 20230311-deb12u1.2
   repos:
     - remote: https://github.com/nokia-eda/playground.git
       name: playground
