@@ -1,0 +1,18 @@
+version: 1.0.0
+name: connect-vmware-5.0.1
+assets:
+  registries:
+    - name: ghcr.io
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1gxb3dUSFJQWlZKQlFuVk1lVWh4TTFrek1IZEpUSGhJUjJzek5XMVFiREI2YzFoNk1nPT0K
+      images:
+        - name: nokia-eda/apps/vmware-plugin
+          format: oci
+          tags:
+            - v5.0.1
+        - name: nokia-eda/apps/nsx-plugin
+          format: oci
+          tags:
+            - v5.0.1

@@ -87,6 +87,7 @@ BUNDLE_LIST += eda-bundle-apps-25-12-1
 BUNDLE_LIST += eda-bundle-apps-25-12-2
 BUNDLE_LIST += eda-bundle-apps-25-12-3
 BUNDLE_LIST += eda-bundle-apps-25-12-4
+BUNDLE_LIST += eda-bundle-apps-25-12-5
 BUNDLE_LIST += eda-bundle-apps-26-4-1
 BUNDLE_LIST += eda-bundle-connect-2-0-0
 BUNDLE_LIST += eda-bundle-connect-2-0-1
@@ -94,12 +95,15 @@ BUNDLE_LIST += eda-bundle-connect-3-0-0
 BUNDLE_LIST += eda-bundle-connect-3-0-1
 BUNDLE_LIST += eda-bundle-connect-4-0-0
 BUNDLE_LIST += eda-bundle-connect-5-0-0
+BUNDLE_LIST += eda-bundle-connect-5-0-1
 BUNDLE_LIST += eda-bundle-connect-6-0-0
 BUNDLE_LIST += eda-bundle-connect-k8s-plugin-5-0-0
+BUNDLE_LIST += eda-bundle-connect-k8s-plugin-5-0-1
 BUNDLE_LIST += eda-bundle-connect-k8s-plugin-6-0-0
 BUNDLE_LIST += eda-bundle-connect-nutanix-0-0-1-beta
 BUNDLE_LIST += eda-bundle-connect-nutanix-6-0-0
 BUNDLE_LIST += eda-bundle-connect-vmware-5-0-0
+BUNDLE_LIST += eda-bundle-connect-vmware-5-0-1
 BUNDLE_LIST += eda-bundle-connect-vmware-6-0-0
 BUNDLE_LIST += eda-bundle-core-24-12-2
 BUNDLE_LIST += eda-bundle-core-24-12-3
@@ -114,6 +118,7 @@ BUNDLE_LIST += eda-bundle-core-25-12-1
 BUNDLE_LIST += eda-bundle-core-25-12-2
 BUNDLE_LIST += eda-bundle-core-25-12-3
 BUNDLE_LIST += eda-bundle-core-25-12-4
+BUNDLE_LIST += eda-bundle-core-25-12-5
 BUNDLE_LIST += eda-bundle-core-26-4-1
 BUNDLE_LIST += eda-bundle-core-tools-26-4-1
 BUNDLE_LIST += eda-bundle-github-1-0-0
@@ -210,10 +215,20 @@ SKIP_CORE_25_12_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
 SKIP_CORE_24_12_X=1
+else ifeq ($(EDA_CORE_VERSION),25.12.5)
+eda-bundle-core-25-12-1_SKIP=1
+eda-bundle-core-25-12-2_SKIP=1
+eda-bundle-core-25-12-3_SKIP=1
+eda-bundle-core-25-12-4_SKIP=1
+SKIP_CORE_26_4_X=1
+SKIP_CORE_25_8_X=1
+SKIP_CORE_25_4_X=1
+SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_VERSION),25.12.4)
 eda-bundle-core-25-12-1_SKIP=1
 eda-bundle-core-25-12-2_SKIP=1
 eda-bundle-core-25-12-3_SKIP=1
+eda-bundle-core-25-12-5_SKIP=1
 SKIP_CORE_26_4_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
@@ -222,6 +237,7 @@ else ifeq ($(EDA_CORE_VERSION),25.12.3)
 eda-bundle-core-25-12-1_SKIP=1
 eda-bundle-core-25-12-2_SKIP=1
 eda-bundle-core-25-12-4_SKIP=1
+eda-bundle-core-25-12-5_SKIP=1
 SKIP_CORE_26_4_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
@@ -230,6 +246,7 @@ else ifeq ($(EDA_CORE_VERSION),25.12.2)
 eda-bundle-core-25-12-1_SKIP=1
 eda-bundle-core-25-12-3_SKIP=1
 eda-bundle-core-25-12-4_SKIP=1
+eda-bundle-core-25-12-5_SKIP=1
 SKIP_CORE_26_4_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
@@ -238,6 +255,7 @@ else ifeq ($(EDA_CORE_VERSION),25.12.1)
 eda-bundle-core-25-12-2_SKIP=1
 eda-bundle-core-25-12-3_SKIP=1
 eda-bundle-core-25-12-4_SKIP=1
+eda-bundle-core-25-12-5_SKIP=1
 SKIP_CORE_26_4_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
@@ -319,6 +337,7 @@ eda-bundle-core-25-12-1_SKIP=1
 eda-bundle-core-25-12-2_SKIP=1
 eda-bundle-core-25-12-3_SKIP=1
 eda-bundle-core-25-12-4_SKIP=1
+eda-bundle-core-25-12-5_SKIP=1
 endif
 
 ifeq ($(SKIP_CORE_25_8_X),1)
@@ -368,6 +387,7 @@ eda-bundle-apps-25-12-1_SKIP=1
 eda-bundle-apps-25-12-2_SKIP=1
 eda-bundle-apps-25-12-3_SKIP=1
 eda-bundle-apps-25-12-4_SKIP=1
+eda-bundle-apps-25-12-5_SKIP=1
 endif
 
 # Always skip it unless asked for set eda-bundle-connect-2-0-0_SKIP=0
@@ -380,12 +400,15 @@ eda-bundle-connect-3-0-0_SKIP=1
 eda-bundle-connect-3-0-1_SKIP=1
 eda-bundle-connect-4-0-0_SKIP=1
 eda-bundle-connect-5-0-0_SKIP=1
+eda-bundle-connect-5-0-1_SKIP=1
 eda-bundle-connect-6-0-0_SKIP=1
 eda-bundle-connect-k8s-plugin-5-0-0_SKIP=1
+eda-bundle-connect-k8s-plugin-5-0-1_SKIP=1
 eda-bundle-connect-k8s-plugin-6-0-0_SKIP=1
 eda-bundle-connect-nutanix-0-0-1-beta_SKIP=1
 eda-bundle-connect-nutanix-6-0-0=1
 eda-bundle-connect-vmware-5-0-0_SKIP=1
+eda-bundle-connect-vmware-5-0-1_SKIP=1
 eda-bundle-connect-vmware-6-0-0_SKIP=1
 endif
 

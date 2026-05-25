@@ -21,3 +21,7 @@ assets:
       url: https://github.com/derailed/k9s/releases/download/v0.50.16/k9s_Linux_amd64.tar.gz
     - name: edaadm-v3.0.0
       url: https://github.com/nokia-eda/edaadm/releases/download/v3.0.0/edaadm-linux-amd64
+    - name: edaadm-v3.1.0
+      url: https://github.com/nokia-eda/edaadm/releases/download/v3.1.0/edaadm-linux-amd64
+    - name: edaadm-v3.2.0
+      url: https://github.com/nokia-eda/edaadm/releases/download/v3.2.0/edaadm-linux-amd64
