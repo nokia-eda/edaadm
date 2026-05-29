@@ -152,6 +152,7 @@ BUNDLE_LIST += eda-bundle-netbox-1-0-0
 BUNDLE_LIST += eda-bundle-netbox-2-0-0
 BUNDLE_LIST += eda-bundle-netbox-3-0-0
 BUNDLE_LIST += eda-bundle-netbox-4-0-0
+BUNDLE_LIST += eda-bundle-netbox-4-0-1
 BUNDLE_LIST += eda-bundle-notifier-2-0-0
 BUNDLE_LIST += eda-bundle-notifier-3-0-0
 BUNDLE_LIST += eda-bundle-notifier-4-0-0
