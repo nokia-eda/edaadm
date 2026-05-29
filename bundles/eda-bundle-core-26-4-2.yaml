@@ -1,0 +1,152 @@
+version: 1.0.0
+name: core-26.4.2
+assets:
+  registries:
+    - name: ghcr.io
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1gxb3dUSFJQWlZKQlFuVk1lVWh4TTFrek1IZEpUSGhJUjJzek5XMVFiREI2YzFoNk1nPT0K
+      images:
+        - name: nokia-eda/core/api-server
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/appstore-server
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/appstore-docs-engine
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/appstore-flow
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/artifact-server
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/bootstrap-server
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/config-engine
+          tags:
+            - 26.4.2
+        - name: nokia-eda/ext/jetstack/cert-manager-acmesolver
+          tags:
+            - v1.18.5
+        - name: nokia-eda/ext/jetstack/cert-manager-cainjector
+          tags:
+            - v1.18.5
+        - name: nokia-eda/ext/jetstack/cert-manager-controller
+          tags:
+            - v1.18.5
+        - name: nokia-eda/ext/jetstack/cert-manager-webhook
+          tags:
+            - v1.18.5
+        - name: nokia-eda/ext/jetstack/cert-manager-csi-driver
+          tags:
+            - v0.12.0
+        - name: nokia-eda/ext/sig-storage/csi-node-driver-registrar
+          tags:
+            - v2.15.0
+        - name: nokia-eda/core/cx
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/cxdp
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/ai-engine
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/cert-checker
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/cluster-manager
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/eda-toolbox
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/eda-fluent
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/eda-fluent-collector
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/metrics-server
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/flow-engine
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/fluent-bit
+          tags:
+            - 3.0.7-amd64
+        - name: nokia-eda/core/fluentd
+          tags:
+            - v1.17.0-debian-1.0
+        - name: nokia-eda/core/eda-fluentbit-collector
+          tags:
+            - v4.0.1-debian-1.0
+        - name: nokia-eda/ext/gogs/gogs
+          tags:
+            - 0.14.1
+        - name: nokia-eda/core/eda-keycloak
+          tags:
+            - 26.4.2
+        - name: nokia-eda/ext/sig-storage/livenessprobe
+          tags:
+            - v2.17.0
+        - name: nokia-eda/core/npp
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/eda-postgres
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/state-aggregator
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/state-controller
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/state-engine
+          tags:
+            - 26.4.2
+        - name: nokia-eda/core/testman
+          tags:
+            - 26.4.2
+        - name: nokia-eda/ext/jetstack/trust-manager
+          tags:
+            - v0.20.3
+        - name: nokia-eda/ext/jetstack/trust-pkg-debian-bookworm
+          tags:
+            - 20230311-deb12u1.2
+        - name: nokia-eda/ext/coredns/coredns
+          tags:
+            - v1.12.1
+        - name: nokia-eda/ext/etcd
+          tags:
+            - 3.6.4-0
+        - name: nokia-eda/ext/loft-sh/vcluster-hpm
+          tags:
+            - 0.1.0
+        - name: nokia-eda/ext/loft-sh/kubernetes
+          tags:
+            - v1.34.0
+        - name: nokia-eda/ext/loft-sh/vcluster-oss
+          tags:
+            - 0.30.4
+        - name: nokia-eda/core/eda-vcluster-plugin
+          tags:
+            - 26.4.2
+        - name: nokia-eda/ext/jetstack/trust-manager
+          tags:
+            - v0.20.3
+        - name: nokia-eda/ext/jetstack/trust-pkg-debian-bookworm
+          tags:
+            - 20230311-deb12u1.2
+  repos:
+    - remote: https://github.com/nokia-eda/playground.git
+      name: playground
+    - remote: https://github.com/nokia-eda/kpt.git
+      name: kpt
+    - remote: https://github.com/nokia-eda/catalog.git
+      name: catalog

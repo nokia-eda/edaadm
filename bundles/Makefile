@@ -60,7 +60,7 @@ ifdef EDA_CORE_REL
 $(error "[ERROR] Please use EDA_CORE_VERSION instead")
 endif
 
-EDA_CORE_VERSION ?= 26.4.1
+EDA_CORE_VERSION ?= 26.4.2
 
 EDA_ASSETS_IMAGE_CACHE ?= $(TOP_DIR)/eda-assets-image-cache-3-0-0.yaml
 
@@ -89,6 +89,7 @@ BUNDLE_LIST += eda-bundle-apps-25-12-3
 BUNDLE_LIST += eda-bundle-apps-25-12-4
 BUNDLE_LIST += eda-bundle-apps-25-12-5
 BUNDLE_LIST += eda-bundle-apps-26-4-1
+BUNDLE_LIST += eda-bundle-apps-26-4-2
 BUNDLE_LIST += eda-bundle-connect-2-0-0
 BUNDLE_LIST += eda-bundle-connect-2-0-1
 BUNDLE_LIST += eda-bundle-connect-3-0-0
@@ -97,14 +98,18 @@ BUNDLE_LIST += eda-bundle-connect-4-0-0
 BUNDLE_LIST += eda-bundle-connect-5-0-0
 BUNDLE_LIST += eda-bundle-connect-5-0-1
 BUNDLE_LIST += eda-bundle-connect-6-0-0
+BUNDLE_LIST += eda-bundle-connect-6-0-1
 BUNDLE_LIST += eda-bundle-connect-k8s-plugin-5-0-0
 BUNDLE_LIST += eda-bundle-connect-k8s-plugin-5-0-1
 BUNDLE_LIST += eda-bundle-connect-k8s-plugin-6-0-0
+BUNDLE_LIST += eda-bundle-connect-k8s-plugin-6-0-1
 BUNDLE_LIST += eda-bundle-connect-nutanix-0-0-1-beta
 BUNDLE_LIST += eda-bundle-connect-nutanix-6-0-0
+BUNDLE_LIST += eda-bundle-connect-nutanix-6-0-1
 BUNDLE_LIST += eda-bundle-connect-vmware-5-0-0
 BUNDLE_LIST += eda-bundle-connect-vmware-5-0-1
 BUNDLE_LIST += eda-bundle-connect-vmware-6-0-0
+BUNDLE_LIST += eda-bundle-connect-vmware-6-0-1
 BUNDLE_LIST += eda-bundle-core-24-12-2
 BUNDLE_LIST += eda-bundle-core-24-12-3
 BUNDLE_LIST += eda-bundle-core-24-12-4
@@ -121,6 +126,8 @@ BUNDLE_LIST += eda-bundle-core-25-12-4
 BUNDLE_LIST += eda-bundle-core-25-12-5
 BUNDLE_LIST += eda-bundle-core-26-4-1
 BUNDLE_LIST += eda-bundle-core-tools-26-4-1
+BUNDLE_LIST += eda-bundle-core-26-4-2
+BUNDLE_LIST += eda-bundle-core-tools-26-4-2
 BUNDLE_LIST += eda-bundle-github-1-0-0
 BUNDLE_LIST += eda-bundle-github-2-0-0
 BUNDLE_LIST += eda-bundle-gitlab-1-0-0
@@ -210,7 +217,16 @@ eda-bundle-tools-1-0-0_SKIP=1
 eda-bundle-storage-1-0-0_SKIP=1
 
 # Skip core bundles based on the selected release
-ifeq ($(EDA_CORE_VERSION),26.4.1)
+ifeq ($(EDA_CORE_VERSION),26.4.2)
+eda-bundle-core-26-4-1_SKIP=1
+eda-bundle-core-tools-26-4-1_SKIP=1
+SKIP_CORE_25_12_X=1
+SKIP_CORE_25_8_X=1
+SKIP_CORE_25_4_X=1
+SKIP_CORE_24_12_X=1
+else ifeq ($(EDA_CORE_VERSION),26.4.1)
+eda-bundle-core-26-4-2_SKIP=1
+eda-bundle-core-tools-26-4-2_SKIP=1
 SKIP_CORE_25_12_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
@@ -330,6 +346,8 @@ endif
 ifeq ($(SKIP_CORE_26_4_X),1)
 eda-bundle-core-26-4-1_SKIP=1
 eda-bundle-core-tools-26-4-1_SKIP=1
+eda-bundle-core-26-4-2_SKIP=1
+eda-bundle-core-tools-26-4-2_SKIP=1
 endif
 
 ifeq ($(SKIP_CORE_25_12_X),1)
@@ -402,14 +420,18 @@ eda-bundle-connect-4-0-0_SKIP=1
 eda-bundle-connect-5-0-0_SKIP=1
 eda-bundle-connect-5-0-1_SKIP=1
 eda-bundle-connect-6-0-0_SKIP=1
+eda-bundle-connect-6-0-1_SKIP=1
 eda-bundle-connect-k8s-plugin-5-0-0_SKIP=1
 eda-bundle-connect-k8s-plugin-5-0-1_SKIP=1
 eda-bundle-connect-k8s-plugin-6-0-0_SKIP=1
+eda-bundle-connect-k8s-plugin-6-0-1_SKIP=1
 eda-bundle-connect-nutanix-0-0-1-beta_SKIP=1
-eda-bundle-connect-nutanix-6-0-0=1
+eda-bundle-connect-nutanix-6-0-0_SKIP=1
+eda-bundle-connect-nutanix-6-0-1_SKIP=1
 eda-bundle-connect-vmware-5-0-0_SKIP=1
 eda-bundle-connect-vmware-5-0-1_SKIP=1
 eda-bundle-connect-vmware-6-0-0_SKIP=1
+eda-bundle-connect-vmware-6-0-1_SKIP=1
 endif
 
 ifeq ($(SKIP_SIMS),1)
