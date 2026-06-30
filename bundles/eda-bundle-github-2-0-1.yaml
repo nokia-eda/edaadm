@@ -1,0 +1,24 @@
+version: 1.0.0
+name: github-v2.0.1
+assets:
+  registries:
+    - name: ghcr.io
+      # tlsVerify: false
+      auth:
+        extraEncodeCount: 1
+        username: Ym05cmFXRXRaV1JoTFdKdmRBPT0=
+        password: WjJod1gxb3dUSFJQWlZKQlFuVk1lVWh4TTFrek1IZEpUSGhJUjJzek5XMVFiREI2YzFoNk1nPT0K
+      images:
+        - name: nokia-eda/apps/github
+          format: oci
+          tags:
+            - v2.0.1
+        - name: nokia-eda/apps/github-controller
+          tags:
+            - v2.0.1
+        - name: nokia-eda/workflows/workflow-run-github-workflow
+          tags:
+            - v2.0.1
+        - name: nokia-eda/workflows/workflow-create-github-issue
+          tags:
+            - v2.0.1

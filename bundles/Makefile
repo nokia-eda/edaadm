@@ -60,7 +60,7 @@ ifdef EDA_CORE_REL
 $(error "[ERROR] Please use EDA_CORE_VERSION instead")
 endif
 
-EDA_CORE_VERSION ?= 26.4.2
+EDA_CORE_VERSION ?= 26.4.3
 
 EDA_ASSETS_IMAGE_CACHE ?= $(TOP_DIR)/eda-assets-image-cache-3-0-0.yaml
 
@@ -91,6 +91,7 @@ BUNDLE_LIST += eda-bundle-apps-25-12-5
 BUNDLE_LIST += eda-bundle-apps-25-12-6
 BUNDLE_LIST += eda-bundle-apps-26-4-1
 BUNDLE_LIST += eda-bundle-apps-26-4-2
+BUNDLE_LIST += eda-bundle-apps-26-4-3
 BUNDLE_LIST += eda-bundle-connect-2-0-0
 BUNDLE_LIST += eda-bundle-connect-2-0-1
 BUNDLE_LIST += eda-bundle-connect-3-0-0
@@ -130,10 +131,14 @@ BUNDLE_LIST += eda-bundle-core-26-4-1
 BUNDLE_LIST += eda-bundle-core-tools-26-4-1
 BUNDLE_LIST += eda-bundle-core-26-4-2
 BUNDLE_LIST += eda-bundle-core-tools-26-4-2
+BUNDLE_LIST += eda-bundle-core-26-4-3
+BUNDLE_LIST += eda-bundle-core-tools-26-4-3
 BUNDLE_LIST += eda-bundle-github-1-0-0
 BUNDLE_LIST += eda-bundle-github-2-0-0
+BUNDLE_LIST += eda-bundle-github-2-0-1
 BUNDLE_LIST += eda-bundle-gitlab-1-0-0
 BUNDLE_LIST += eda-bundle-gitlab-2-0-0
+BUNDLE_LIST += eda-bundle-gitlab-2-0-1
 BUNDLE_LIST += eda-bundle-influxdb-exporter-1-0-0
 BUNDLE_LIST += eda-bundle-influxdb-exporter-2-0-0
 BUNDLE_LIST += eda-bundle-influxdb-exporter-3-0-0
@@ -206,6 +211,7 @@ BUNDLE_LIST += eda-bundle-snmp-traps-3-0-0
 BUNDLE_LIST += eda-bundle-stdout-exporter-1-0-0
 BUNDLE_LIST += eda-bundle-stdout-exporter-1-0-1
 BUNDLE_LIST += eda-bundle-stdout-exporter-2-0-0
+BUNDLE_LIST += eda-bundle-tpi-1-0-0
 BUNDLE_LIST += eda-bundle-talos-1-9-2
 BUNDLE_LIST += eda-bundle-tools-1-0-0
 BUNDLE_LIST += eda-bundle-talos-1-11-5
@@ -220,9 +226,20 @@ eda-bundle-tools-1-0-0_SKIP=1
 eda-bundle-storage-1-0-0_SKIP=1
 
 # Skip core bundles based on the selected release
-ifeq ($(EDA_CORE_VERSION),26.4.2)
+ifeq ($(EDA_CORE_VERSION),26.4.3)
 eda-bundle-core-26-4-1_SKIP=1
 eda-bundle-core-tools-26-4-1_SKIP=1
+eda-bundle-core-26-4-2_SKIP=1
+eda-bundle-core-tools-26-4-2_SKIP=1
+SKIP_CORE_25_12_X=1
+SKIP_CORE_25_8_X=1
+SKIP_CORE_25_4_X=1
+SKIP_CORE_24_12_X=1
+else ifeq ($(EDA_CORE_VERSION),26.4.2)
+eda-bundle-core-26-4-1_SKIP=1
+eda-bundle-core-tools-26-4-1_SKIP=1
+eda-bundle-core-26-4-3_SKIP=1
+eda-bundle-core-tools-26-4-3_SKIP=1
 SKIP_CORE_25_12_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
@@ -230,6 +247,8 @@ SKIP_CORE_24_12_X=1
 else ifeq ($(EDA_CORE_VERSION),26.4.1)
 eda-bundle-core-26-4-2_SKIP=1
 eda-bundle-core-tools-26-4-2_SKIP=1
+eda-bundle-core-26-4-3_SKIP=1
+eda-bundle-core-tools-26-4-3_SKIP=1
 SKIP_CORE_25_12_X=1
 SKIP_CORE_25_8_X=1
 SKIP_CORE_25_4_X=1
@@ -366,6 +385,8 @@ eda-bundle-core-26-4-1_SKIP=1
 eda-bundle-core-tools-26-4-1_SKIP=1
 eda-bundle-core-26-4-2_SKIP=1
 eda-bundle-core-tools-26-4-2_SKIP=1
+eda-bundle-core-26-4-3_SKIP=1
+eda-bundle-core-tools-26-4-3_SKIP=1
 endif
 
 ifeq ($(SKIP_CORE_25_12_X),1)
