@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apply-setters-fn-config
+data:
+  USER_REPOS_TO_CREATE: "" # A space separated list of repository names eg: "repo1 repo2 repo3"
+  B64_ASSET_HOST_GIT_USERNAME: ZWRh # echo -n "eda" | base64
+  B64_ASSET_HOST_GIT_PASSWORD: ZWRh # echo -n "eda" | base64
+  B64_ASSET_HOST_ARTIFACTS_HTPASSWORD: ZWRhOiRhcHIxJE15RHNDZE1CJDBVRWNEc2RHWG9xaFdTZW5VVTBNSjEK # printf $(htpasswd -nb eda eda) | base64

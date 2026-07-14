@@ -46,10 +46,13 @@ APPLY_SETTER_IMG=ghcr.io/srl-labs/kpt-apply-setters:0.1.1
 KUBECTL_SRC ?= https://dl.k8s.io/release/$(KUBECTL_VERSION)/bin/$(OS)/$(ARCH)/kubectl
 KPT_SRC ?= https://github.com/GoogleContainerTools/kpt/releases/download/$(KPT_VERSION)/kpt_$(OS)_$(ARCH)
 
+KPT_SETTERS ?= $(CFG)/kpt-setters.yaml
+
 ## Curl options:
 CURL := curl --silent --fail --show-error
 
 KPT_LIVE_INIT_FORCE ?= 0
+KPT_INVENTORY_ADOPT ?= 1
 
 define download-bin
     $(info --> INFO: Downloading $(2))
@@ -119,22 +122,9 @@ $(KPT): | $(BASE) $(TOOLS) ; $(info --> TOOLS: Ensuring kpt is present in $(KPT)
 ##@ Configure components
 
 .PHONY: eda-configure-shipyard
-eda-configure-shipyard: | $(KPT) ; $(info --> INFO: configuring shipyard) @ ## Configure the shipyard
-	@{	\
-		if [[ -z "$(ASSET_HOST_GIT_USERNAME)" ]]; then echo "[ERROR]: ASSET_HOST_GIT_USERNAME must be defined" && exit 1; fi ;\
-		if [[ -z "$(ASSET_HOST_GIT_PASSWORD)" ]]; then echo "[ERROR]: ASSET_HOST_GIT_PASSWORD must be defined" && exit 1; fi ;\
-		if [[ -z "$(ASSET_HOST_ARTIFACTS_HTPASSWORD)" ]]; then echo "[ERROR]: ASSET_HOST_ARTIFACTS_HTPASSWORD must be defined" && exit 1; fi ;\
-	}
-	@{	\
-		$(KPT) fn eval \
-		--image $(APPLY_SETTER_IMG) \
-		--truncate-output=false \
-		-- \
-		ASSET_HOST_GIT_USERNAME=$(ASSET_HOST_GIT_USERNAME) \
-		ASSET_HOST_GIT_PASSWORD=$(ASSET_HOST_GIT_PASSWORD) \
-		ASSET_HOST_ARTIFACTS_HTPASSWORD=$(ASSET_HOST_ARTIFACTS_HTPASSWORD) \
-		;\
-	}
+eda-configure-shipyard: | $(KPT) ; $(info --> INFO: Configuring shipyard using $(KPT_SETTERS)) @ ## Configure the shipyard
+	@if [[ ! -f $(KPT_SETTERS) ]]; then echo "[ERROR]: The setters file does not exist! - KPT_SETTERS=$(KPT_SETTERS)" && exit 1; fi
+	@$(KPT) fn eval --image $(APPLY_SETTER_IMG) --truncate-output=false --fn-config $(KPT_SETTERS) | $(INDENT_OUT)
 
 ##@ Install K8S components
 
@@ -188,15 +178,31 @@ uninstall-eda-asset-host: | $(BASE) download-tools ; @ ## Uninstall asset-hoster
 	@$(call UN_INSTALL_KPT_PACKAGE,eda-kpt-asset-host,asset-host)
 
 .PHONY: uninstall-eda-shipyard
-uninstall-eda-shipyard: | uninstall-ingress uninstall-storage uninstall-eda-asset-host ; @ ## Install ingress, storage and eda-asset-hoster
+uninstall-eda-shipyard: | uninstall-ingress uninstall-storage uninstall-eda-asset-host ; @ ## Uninstall ingress, storage and eda-asset-hoster
 
 ##@ Help
 
 .PHONY: help
 help:  ## Show the help menu
-	@sed -ne 's/^\([^[:space:]]*\):.*##/\1\t|\t/p' $(MAKEFILE_LIST) | sort | column -t -s $$'\t' | pager
+	@sed -ne 's/^\([^[:space:]]*\):.*##/\1|/p' $(MAKEFILE_LIST) | sort | while IFS='|' read -r target desc; do printf '%-40s | %s\n' "$$target" "$$desc"; done
 
 
 .PHONY: ls-setters
-ls-setters: | $(BASE) $(KPT) ## View available kpt setters
-	@$(KPT) fn eval -i list-setters:v0.1.0 --truncate-output=false
+ls-setters: | $(BASE) ## View available kpt setters
+	@{	\
+		grep -rh '# kpt-set:' $(BASE) --include='*.yaml' --include='*.yml' --exclude-dir=tools	 \
+			| while IFS= read -r line; do														 \
+				name=$$(sed -n 's/.*# kpt-set: $${\([^}]*\)}.*/\1/p' <<< "$$line")				;\
+				value_part="$${line%%# kpt-set:*}"												;\
+				value_part="$${value_part#*:}"													;\
+				value=$$(sed 's/^[[:space:]]*//; s/[[:space:]]*$$//' <<< "$$value_part")		;\
+				value=$$(sed 's/^"\(.*\)"$$/\1/' <<< "$$value")									;\
+				if [[ -n "$$value" ]]; then														 \
+					printf 'Name: %s, Value: %s\n' "$$name" "$$value"							;\
+				else																			 \
+					printf 'Name: %s\n' "$$name"												;\
+				fi																				;\
+			done																				 \
+			| sort -u																			 \
+			| $(INDENT_OUT)																		;\
+	}

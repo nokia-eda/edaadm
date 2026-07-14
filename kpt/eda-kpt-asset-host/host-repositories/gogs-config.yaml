@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: gogs-config
-  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST} # kpt-set: ${EDA_GOGS_NAMESPACE}
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST}
 data:
   app.ini: |
     BRAND_NAME = EDA
@@ -24,6 +24,13 @@ data:
     DISABLE_REGISTRATION = true
     [server]
     EXTERNAL_URL = /git
+    SSH_SERVER_ALGORITHMS = ecdsa, ed25519
+    MINIMUM_KEY_SIZE_CHECK = true
+    [ssh.minimum_key_sizes]
+    ED25519 = 256
+    ECDSA   = 384
+    RSA     = -1
+    DSA     = -1
   readme: |-
     # {Name}
 

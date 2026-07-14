@@ -1,0 +1,16 @@
+version: 1.0.0
+name: srl-ghcr-24.X.Y
+assets:
+  registries:
+    - name: ghcr.io
+      images:
+        - name: nokia/srlinux
+          platform: linux/amd64
+          tags:
+            - 24.10.1-492
+            - 24.10.2-357
+            - 24.10.3-201
+            - 24.10.4-244
+            - 24.10.5-344
+            - 24.10.6-209
+            - 24.10.7-191

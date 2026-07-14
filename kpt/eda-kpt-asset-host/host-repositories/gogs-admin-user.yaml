@@ -7,5 +7,5 @@ metadata:
     eda.nokia.com/backup: "true"
 type: kubernetes.io/basic-auth
 stringData:
-  username: ZWRh # kpt-set: ${ASSET_HOST_GIT_USERNAME}
-  password: ZWRh # kpt-set: ${ASSET_HOST_GIT_PASSWORD}
+  username: ZWRh # kpt-set: ${B64_ASSET_HOST_GIT_USERNAME}
+  password: ZWRh # kpt-set: ${B64_ASSET_HOST_GIT_PASSWORD}

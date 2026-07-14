@@ -25,3 +25,5 @@ assets:
       url: https://github.com/nokia-eda/edaadm/releases/download/v3.1.0/edaadm-linux-amd64
     - name: edaadm-v3.2.0
       url: https://github.com/nokia-eda/edaadm/releases/download/v3.2.0/edaadm-linux-amd64
+    - name: edaadm-v3.3.0
+      url: https://github.com/nokia-eda/edaadm/releases/download/v3.3.0/edaadm-linux-amd64

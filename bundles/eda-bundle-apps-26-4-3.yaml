@@ -197,7 +197,7 @@ assets:
         - name: nokia-eda/workflows/workflow-topologies-topology
           tags:
             - v6.0.2
-artifacts:
+  artifacts:
     # SRL Schema Profiles
     - name: srlinux-24.10.1-492.zip
       url: https://github.com/nokia/srlinux-yang-models/releases/download/v24.10.1/srlinux-24.10.1-492.zip

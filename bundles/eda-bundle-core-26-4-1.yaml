@@ -155,3 +155,11 @@ assets:
       url: https://github.com/nokia-eda/edactl/releases/download/v26.4.1/edactl-v26.4.1-linux-amd64
     - name: edactl-v26.4.1-linux-arm64
       url: https://github.com/nokia-eda/edactl/releases/download/v26.4.1/edactl-v26.4.1-linux-arm64
+    - name: edabuilder-v26.4.1-darwin-amd64
+      url: https://github.com/nokia-eda/edabuilder/releases/download/v26.4.1/edabuilder-v26.4.1-darwin-amd64
+    - name: edabuilder-v26.4.1-darwin-arm64
+      url: https://github.com/nokia-eda/edabuilder/releases/download/v26.4.1/edabuilder-v26.4.1-darwin-arm64
+    - name: edabuilder-v26.4.1-linux-amd64
+      url: https://github.com/nokia-eda/edabuilder/releases/download/v26.4.1/edabuilder-v26.4.1-linux-amd64
+    - name: edabuilder-v26.4.1-linux-arm64
+      url: https://github.com/nokia-eda/edabuilder/releases/download/v26.4.1/edabuilder-v26.4.1-linux-arm64

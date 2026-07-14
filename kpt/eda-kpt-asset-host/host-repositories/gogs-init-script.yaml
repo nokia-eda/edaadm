@@ -6,8 +6,8 @@ metadata:
 data:
   init.sh: |-
     #!/bin/bash
-    REPOS="${REPOS_TO_CREATE:-catalog playground kpt connect-k8s-helm-charts}"
-    # Number of seconds to wait for gogs to comeup
+    declare -a REPOS=("catalog" "playground" "kpt" "connect-k8s-helm-charts")
+    # Number of seconds to wait for gogs to come up
     MAX_RETRIES=30
     # MAX number of tries to create a repo
     MAX_RETRY_REPO_CREATION=10
@@ -15,72 +15,110 @@ data:
     INIT_MARKER=/data/eda-git-init.done
     trap : TERM INT
 
+    log() {
+      echo "--> [$(date)] $@"
+    }
+
+    die() {
+      echo "--> [$(date)] ERROR: $@"
+      exit 1
+    }
+
     USER_CONFIG=/var/run/eda/user-config
     USERNAME_FILE=/var/run/eda/user-config/username
     PASSWORD_FILE=/var/run/eda/user-config/password
+    REPOSITORY_LOCATION=/data/git/gogs-repositories
 
-    until [[ -d "${USER_CONFIG}" ]] do echo "--> [$(date)] Waiting for "${USER_CONFIG}" to exist" && sleep 2s; done
-    until [[ -f "${USERNAME_FILE}" ]] do echo "--> [$(date)] Waiting for "${USERNAME_FILE}" to exist" && sleep 2s; done
-    until [[ -f "${PASSWORD_FILE}" ]] do echo "--> [$(date)] Waiting for "${PASSWORD_FILE}" to exist" && sleep 2s; done
+    until [[ -d "${USER_CONFIG}" ]] do log "Waiting for "${USER_CONFIG}" to exist" && sleep 2s; done
+    until [[ -f "${USERNAME_FILE}" ]] do log "Waiting for "${USERNAME_FILE}" to exist" && sleep 2s; done
+    until [[ -f "${PASSWORD_FILE}" ]] do log "Waiting for "${PASSWORD_FILE}" to exist" && sleep 2s; done
 
-    ADMIN_USER="$(cat "${USERNAME_FILE}" | base64 -d)"
-    ADMIN_PASS="$(cat "${PASSWORD_FILE}" | base64 -d)"
+    ADMIN_USER="$(base64 -d < "${USERNAME_FILE}" | tr -d '\n\r')"
+    ADMIN_PASS="$(base64 -d < "${PASSWORD_FILE}" | tr -d '\n\r')"
+    [[ -n "${ADMIN_USER}" ]] || die "decoded admin username is empty"
+    [[ -n "${ADMIN_PASS}" ]] || die "decoded admin password is empty"
+
+    if [[ ! -z "${USER_REPOS_TO_CREATE}" ]] then
+      log "Adding user provided repos to the list of repos to create ${USER_REPOS_TO_CREATE}"
+      read -ra temp_array <<< "$USER_REPOS_TO_CREATE"
+      REPOS+=("${temp_array[@]}")
+    else
+      log "No user repos specified!"
+    fi
+
+    # Build Basic auth without curl --user user:pass (password may contain ':' and other specials).
+    basic_auth_header() {
+      printf '%s:%s' "${ADMIN_USER}" "${ADMIN_PASS}" | base64 | tr -d '\n\r'
+    }
 
     check_gogs() {
       curl -s localhost:3000 > /dev/null
       echo $?
     }
 
-    create_repo() {
+    create_repo_if_it_does_not_exist() {
         repo=$1
+        repo_path="${REPOSITORY_LOCATION}/${ADMIN_USER}/${repo}.git"
+
+        if [[ -d "${repo_path}" ]]; then
+          log "$repo already exists at ${repo_path}"
+          return
+        fi
+
         created=0
         retry_count=0
         while [[ $retry_count -lt $MAX_RETRY_REPO_CREATION ]]; do
-            echo "--> [$(date)] Creating repository: ${repo}"
+            log "Creating repository: ${repo}"
             curl \
                 --fail-with-body \
-                -X POST localhost:3000/api/v1/admin/users/${ADMIN_USER}/repos \
+                -X POST "localhost:3000/api/v1/admin/users/${ADMIN_USER}/repos" \
                 -H "Content-Type: application/json" \
-                -d "{\"name\":\"${repo}\",\"description\":\"Repository storing saved ${repo}\",\"auto_init\":true,\"private\":true}" \
-                --user "${ADMIN_USER}:${ADMIN_PASS}"
+                -H "Authorization: Basic $(basic_auth_header)" \
+                -d "{\"name\":\"${repo}\",\"description\":\"Repository storing saved ${repo}\",\"auto_init\":true,\"private\":true}"
             exit_code=$?
             echo ""
             if [[ $exit_code -ne 0 ]]; then
                 retry_count=$((retry_count+1))
                 sleep 10s
-                echo "--> [$(date)] Could not create repo $repo - POST response $exit_code - retry_count $retry_count"
+                log "Could not create repo $repo - POST response $exit_code - retry_count $retry_count"
             else
-                echo "--> [$(date)] Created repo $repo - retry_count $retry_count"
+                log "Created repo $repo - retry_count $retry_count"
                 created=1
                 break
             fi
         done
-        if [[ $created -ne 1 ]]; then echo "-->[$(date)] Could not create repo $repo - retry_count $retry_count - aborting" && exit 1; fi
+        if [[ $created -ne 1 ]]; then die "Could not create repo $repo - retry_count $retry_count - aborting"; fi
     }
 
     /app/gogs/docker/start.sh &
     RETRY_COUNT=0
     until [ $(check_gogs) -eq 0 ] || [ $RETRY_COUNT -eq $MAX_RETRIES ]; do
-      echo "--> [$(date)] Waiting for Gogs to start..."
+      log "Waiting for Gogs to start..."
       sleep 1
       let RETRY_COUNT=RETRY_COUNT+1
     done
 
     if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
-      echo "--> [$(date)] Gogs did not start in time. Exiting."
+      log "Gogs did not start in time. Exiting."
       exit 1
     fi
 
     if [[ ! -f "${INIT_MARKER}" ]] then
-      echo "--> [$(date)] Init marker at ${INIT_MARKER} not found, creating admin user and repos"
-      su - git -c "/app/gogs/gogs admin create-user --name ${ADMIN_USER} --password ${ADMIN_PASS} --admin --email ${ADMIN_USER}@git.eda.dev"
-      for repo in ${REPOS}; do
-          create_repo "$repo"
-      done
+      log "Init marker at ${INIT_MARKER} not found, creating admin user"
+      create_user_cmd=$(printf '%q ' /app/gogs/gogs admin create-user \
+        --name "${ADMIN_USER}" \
+        --password "${ADMIN_PASS}" \
+        --admin \
+        --email "${ADMIN_USER}@git.eda.dev")
+      su - git -s /bin/bash -c "${create_user_cmd}"
+      touch "${INIT_MARKER}"
     else
-      echo "--> [$(date)] Existing init marker at ${INIT_MARKER} found, skipping creation of admin user + repos"
+      log "Existing init marker at ${INIT_MARKER} found, skipping creation of admin user"
     fi
 
-    touch "${INIT_MARKER}"
-    echo "--> [$(date)] Done init, sleeping to infinity and beyond"
+    for repo in "${REPOS[@]}"; do
+        create_repo_if_it_does_not_exist "$repo"
+    done
+
+    log "Done init, sleeping to infinity and beyond"
     sleep infinity & wait

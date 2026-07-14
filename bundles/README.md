@@ -9,8 +9,10 @@
 - [Saving and Loading EDA assets](#saving-and-loading-eda-assets)
   - [Single bundle operations:](#single-bundle-operations)
   - [Bulk operations:](#bulk-operations)
-    - [Save all of the bundles](#save-all-of-the-bundles)
-    - [Load all of the bundles into an asset host](#load-all-of-the-bundles-into-an-asset-host)
+    - [Make options:](#make-options-1)
+    - [What are the default bundles ?](#what-are-the-default-bundles-)
+    - [Save the default list of bundles](#save-the-default-list-of-bundles)
+    - [Load the default list of bundles into an asset host](#load-the-default-list-of-bundles-into-an-asset-host)
 
 ---
 
@@ -116,22 +118,42 @@ It can be downloaded [here](github.com/nokia-eda/edaadm)
 
 ## Bulk operations:
 
-### Save all of the bundles
+### Make options:
+
+* These can be specified to the `save-default-bundles` and `load-default-bundles` command to augment the default list of bundles
+  * `SKIP_DEFAULT_BUNDLES=1` - Don't include the default list of bundles eg. talos, ceph, metallb
+  * `WORKERS` - How many workers to use when downloading assets.
+     * defaults to nproc/2 - adjust as needed based on system requirements.
+
+### What are the default bundles ?
+
+* List the bundles currently selected based on make options and specified versions of `EDA_CORE_VERSION` and `EDA_APPS_VERSION`
+
 ```shell
-make save-all-bundles
+make ls-default-bundles
 ```
 
-### Load all of the bundles into an asset host
+### Save the default list of bundles
+
+```shell
+make save-default-bundles
+```
+
+### Load the default list of bundles into an asset host
   * `ASSET_HOST` is the `fqdn/dns/ip` on how to reach the asset host.
   * All username/password values are base64 encoded of originals.
   * `echo -n "username" | base64`
   * `echo -n "password" | base64`
+
 ```shell
-make load-all-bundles \
-EDAADM=<path>/edaadm \
+make load-default-bundles \
 ASSET_HOST=eda-assets-01.local \
 ASSET_HOST_GIT_USERNAME=<base64 encoded username> \
 ASSET_HOST_GIT_PASSWORD=<base64 encoded password> \
 ASSET_HOST_ARTIFACTS_USERNAME=<base64 encoded username> \
 ASSET_HOST_ARTIFACTS_PASSWORD=<base64 encoded password>
 ```
+
+> [!tip]
+>
+> See `make help` for complete list of targets

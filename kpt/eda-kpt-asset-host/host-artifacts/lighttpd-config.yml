@@ -12,4 +12,3 @@ data:
   15-listen-ipv6.conf: |-
     # listen to IPv6
     $SERVER["socket"] == "[::]:80" {  }
-

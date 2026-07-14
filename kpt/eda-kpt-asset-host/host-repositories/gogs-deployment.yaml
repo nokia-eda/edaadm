@@ -38,12 +38,9 @@ spec:
                     operator: In
                     values:
                       - control-plane
-      # imagePullSecrets:
-      #   - name: core # kpt-set: ${CORE_IMG_CREDENTIALS}
       containers:
         - name: gogs
           image: ghcr.io/nokia-eda/adm/gogs:0.13.0 # kpt-set: ${GOGS_IMG_TAG}
-          #image: gogs/gogs:latest
           ports:
             - containerPort: 22
               name: ssh
@@ -53,8 +50,8 @@ spec:
           env:
             - name: SOCAT_LINK
               value: "false"
-            - name: REPOS_TO_CREATE
-              value: "catalog playground kpt connect-k8s-helm-charts" # kpt-set: ${REPOS_TO_CREATE}
+            - name: USER_REPOS_TO_CREATE
+              value: "" # kpt-set: ${USER_REPOS_TO_CREATE}
           volumeMounts:
             - name: init
               mountPath: /init
@@ -65,10 +62,6 @@ spec:
             - name: user-config
               readOnly: true
               mountPath: "/var/run/eda/user-config"
-            # - name: readme
-            # mountPath: /data/gogs/conf/readme
-            # - name: readme
-            # mountPath: /app/gogs/custom/conf/readme
             - name: eda-git-persistent-storage
               mountPath: /data
       volumes:

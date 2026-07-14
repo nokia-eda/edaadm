@@ -150,3 +150,20 @@ assets:
       name: kpt
     - remote: https://github.com/nokia-eda/catalog.git
       name: catalog
+  artifacts:
+    - name: edactl-v26.4.2-darwin-amd64
+      url: https://github.com/nokia-eda/edactl/releases/download/v26.4.2/edactl-v26.4.2-darwin-amd64
+    - name: edactl-v26.4.2-darwin-arm64
+      url: https://github.com/nokia-eda/edactl/releases/download/v26.4.2/edactl-v26.4.2-darwin-arm64
+    - name: edactl-v26.4.2-linux-amd64
+      url: https://github.com/nokia-eda/edactl/releases/download/v26.4.2/edactl-v26.4.2-linux-amd64
+    - name: edactl-v26.4.2-linux-arm64
+      url: https://github.com/nokia-eda/edactl/releases/download/v26.4.2/edactl-v26.4.2-linux-arm64
+    - name: edabuilder-v26.4.2-darwin-amd64
+      url: https://github.com/nokia-eda/edabuilder/releases/download/v26.4.2/edabuilder-v26.4.2-darwin-amd64
+    - name: edabuilder-v26.4.2-darwin-arm64
+      url: https://github.com/nokia-eda/edabuilder/releases/download/v26.4.2/edabuilder-v26.4.2-darwin-arm64
+    - name: edabuilder-v26.4.2-linux-amd64
+      url: https://github.com/nokia-eda/edabuilder/releases/download/v26.4.2/edabuilder-v26.4.2-linux-amd64
+    - name: edabuilder-v26.4.2-linux-arm64
+      url: https://github.com/nokia-eda/edabuilder/releases/download/v26.4.2/edabuilder-v26.4.2-linux-arm64
