@@ -28,7 +28,7 @@ UNAME := $(shell uname)
 # Lowercase - sane version
 OS := $(shell echo "$(UNAME)" | tr '[:upper:]' '[:lower:]')
 
-EDAADM_VERSION ?= v3.3.0
+EDAADM_VERSION ?= v4.0.0
 EDAADM_SRC ?= https://github.com/nokia-eda/edaadm/releases/download/$(EDAADM_VERSION)/edaadm-$(OS)-$(ARCH)
 
 # Number of workers to use in bundle save operations (half of online CPUs, nproc/2)
@@ -56,7 +56,7 @@ CURL_PM ?= curl $(CURL_OPTS)
 # use the progress bar instead of the meter - does weird things in output if there are multiple redirects/hops
 CURL_PB ?= curl $(CURL_OPTS) --progress-bar
 
-TALOS_IMAGER_IMG ?= ghcr.io/siderolabs/imager:v1.11.5
+TALOS_IMAGER_IMG ?= ghcr.io/siderolabs/imager:v1.13.6
 
 # This is the parent directory where we store/load everything for this Makefile
 OUTPUT_DIR ?= $(TOP_DIR)/eda-cargo
@@ -66,14 +66,30 @@ $(error "[ERROR] Please use EDA_CORE_VERSION instead")
 endif
 
 EDA_CORE_VERSION ?= 26.4.3
+EDA_CORE_MAJOR := $(word 1,$(subst ., ,$(EDA_CORE_VERSION)))
+EDA_CORE_MINOR := $(word 2,$(subst ., ,$(EDA_CORE_VERSION)))
+
 EDA_APPS_VERSION ?= 26.4.3
 
-EDA_ASSETS_IMAGE_CACHE ?= $(TOP_DIR)/eda-assets-image-cache-3-0-0.yaml
+# The user did not provide a K8S_VERSION, based on the EDA_CORE_VERSION we will set it to the appropriate version
+ifndef K8S_VERSION
+ifneq ($(filter $(EDA_CORE_MAJOR),24 25),)
+K8S_VERSION := 1.34.1
+else ifeq ($(EDA_CORE_MAJOR).$(EDA_CORE_MINOR),26.4)
+K8S_VERSION := 1.34.1
+else
+K8S_VERSION := 1.36.2
+endif
+endif
+
+EDA_ASSETS_IMAGE_CACHE ?= $(TOP_DIR)/eda-assets-image-cache-4-0-0.yaml
 
 B64_ASSET_HOST_REGISTRY_USERNAME ?= ""
 B64_ASSET_HOST_REGISTRY_PASSWORD ?= ""
 ASSET_HOST_GIT_SCHEME ?= https
-ASSET_HOST_ARITFACTS_SCHEME ?= https
+ASSET_HOST_ARTIFACTS_SCHEME ?= https
+# Maintain backwards compatibility for old variable that has a typo
+ASSET_HOST_ARITFACTS_SCHEME ?= $(ASSET_HOST_ARTIFACTS_SCHEME)
 
 # The _BUNDLES variables are lists of the names of the bundle files without the yaml extension
 ALL_BUNDLES := $(basename $(notdir $(wildcard $(TOP_DIR)/*.yaml)))
@@ -92,10 +108,11 @@ DEFAULT_BUNDLES += eda-bundle-core-$(subst .,-,$(EDA_CORE_VERSION))
 DEFAULT_BUNDLES += eda-bundle-apps-$(subst .,-,$(EDA_APPS_VERSION))
 
 ifndef SKIP_DEFAULT_BUNDLES
-DEFAULT_BUNDLES += eda-bundle-talos-1-11-5
-DEFAULT_BUNDLES += eda-bundle-tools-2-0-0
-DEFAULT_BUNDLES += eda-bundle-storage-2-0-0
+DEFAULT_BUNDLES += eda-bundle-talos-1-13-6-k8s-$(subst .,-,$(K8S_VERSION))
+DEFAULT_BUNDLES += eda-bundle-tools-3-0-0
+DEFAULT_BUNDLES += eda-bundle-storage-3-0-0
 DEFAULT_BUNDLES += eda-bundle-metallb-0-13-7
+DEFAULT_BUNDLES += eda-bundle-metallb-0-16-1
 endif
 
 ## Macros
@@ -150,7 +167,7 @@ load-$1: | $(OUTPUT_DIR) $(EDAADM) check-load-params
 			export _ASSET_HOST_GIT=$(ASSET_HOST_GIT)																					;\
 			export _ASSET_HOST_REGISTRY=$(ASSET_HOST_REGISTRY)																			;\
 		else																															 \
-			export _ASSET_HOST_ARTIFACTS="$(ASSET_HOST_ARITFACTS_SCHEME)://$(ASSET_HOST)/artifacts-upload"								;\
+			export _ASSET_HOST_ARTIFACTS="$(ASSET_HOST_ARTIFACTS_SCHEME)://$(ASSET_HOST)/artifacts-upload"								;\
 			export _ASSET_HOST_GIT=$(ASSET_HOST_GIT_SCHEME)://$(ASSET_HOST)/git/$$$$(echo -n "$(B64_ASSET_HOST_GIT_USERNAME)" | base64 -d)	;\
 			export _ASSET_HOST_REGISTRY=$(ASSET_HOST)																					;\
 		fi																																;\
@@ -198,22 +215,44 @@ define generate-bulk-targets-from-list
 LIST_SAVE_$(1)_BUNDLES := $(addprefix save-$(4),$(2))
 LIST_LOAD_$(1)_BUNDLES := $(addprefix load-$(4),$(2))
 
+.PHONY: check-$(1)-bundles-exist
+check-$(1)-bundles-exist: | $(BASE)
+	@{	\
+		if [[ -z "$(2)" ]]; then																						 \
+			echo "--> ERROR: No $(1) bundles found" && exit 1															;\
+		fi																												;\
+		for bundle in $(sort $(2)); do																					 \
+			bundle_file="$(TOP_DIR)/$$$${bundle}.yaml"																	;\
+			[[ "$(4)" == "user-" ]] && bundle_file="$(USER_BUNDLES_DIR)/$$$${bundle}.yaml"								;\
+			if [[ ! -f "$$$${bundle_file}" ]]; then echo "--> ERROR: Bundle $$$${bundle} does not exist!" && exit 1; fi	;\
+		done																											;\
+	}
+
 HELP_ENTRIES+=save-$(1)-bundles|Save $(3)::
 .PHONY: save-$(1)-bundles
-save-$(1)-bundles: | $$(LIST_SAVE_$(1)_BUNDLES)
+save-$(1)-bundles: | check-$(1)-bundles-exist $$(LIST_SAVE_$(1)_BUNDLES)
 
 HELP_ENTRIES+=load-$(1)-bundles|Load $(3)::
 .PHONY: load-$(1)-bundles
-load-$(1)-bundles: | $$(LIST_LOAD_$(1)_BUNDLES)
+load-$(1)-bundles: | check-$(1)-bundles-exist $$(LIST_LOAD_$(1)_BUNDLES)
 
 HELP_ENTRIES+=ls-$(1)-bundles|List $(3)::
 .PHONY: ls-$(1)-bundles
 ls-$(1)-bundles: | $(BASE)
 ifeq ($(1),default)
-	@echo "--> Default eda core version to load/save: EDA_CORE_VERSION=$(EDA_CORE_VERSION), EDA_APPS_VERSION=$(EDA_APPS_VERSION)"
+	@echo "--> Default eda core version to load/save: EDA_CORE_VERSION=$(EDA_CORE_VERSION), EDA_APPS_VERSION=$(EDA_APPS_VERSION) K8S_VERSION=$(K8S_VERSION)"
 endif
-	@echo "--> List of $(1) bundles:"
-	@if [[ ! -z "$(2)" ]]; then echo "$(2)" | tr ' ' '\n' | sort | sed 's/^/$(4)/' | sed 's/^/    /'; fi
+	@{	\
+		if [[ -z "$(2)" ]]; then echo "--> ERROR: No $(1) bundles found" && exit 1; fi									;\
+		echo "--> List of $(1) bundles:"																				;\
+		for bundle in $(sort $(2)); do																					 \
+			bundle_file="$(TOP_DIR)/$$$${bundle}.yaml"																	;\
+			line="    $(4)$$$${bundle}"																					;\
+			[[ "$(4)" == "user-" ]] && bundle_file="$(USER_BUNDLES_DIR)/$$$${bundle}.yaml"								;\
+			[[ ! -f "$$$${bundle_file}" ]] && line="$$$${line} (warning: bundle does not exist)"						;\
+			echo "$$$${line}"																							;\
+		done																											;\
+	}
 endef
 
 $(eval $(call generate-bulk-targets-from-list,all,$(ALL_BUNDLES),'all of the bundles found in  $(TOP_DIR)'))
@@ -279,8 +318,6 @@ create-asset-vm-metal-boot-iso: | $(OUTPUT_DIR) pull-talos-imager-container does
 		-v $${to}:/secureboot:ro \
 		-v $${to}:/out \
 		-v $${image_cache_loc}:/image-cache.oci:ro \
-		-v /dev:/dev \
-		--privileged \
 		$(TALOS_IMAGER_IMG) \
 		iso --image-cache /image-cache.oci --extra-kernel-arg net.ifnames=0 --extra-kernel-arg=-console --extra-kernel-arg=console=ttyS0 ;\
 		\mv -fv $${output_file} $${rename_file}									;\
@@ -301,10 +338,8 @@ create-asset-vm-nocloud-boot-iso: | $(OUTPUT_DIR) pull-talos-imager-container do
 		-v $${to}:/secureboot:ro \
 		-v $${to}:/out \
 		-v $${image_cache_loc}:/image-cache.oci:ro \
-		-v /dev:/dev \
-		--privileged \
 		$(TALOS_IMAGER_IMG) \
-		iso --image-cache /image-cache.oci --image-disk-size=2GiB --platform nocloud ;\
+		iso --image-cache /image-cache.oci --platform nocloud ;\
 		\mv -fv $${output_file} $${rename_file}									;\
 		echo "--> INFO: Created $$(readlink -f $${rename_file})"				;\
 	}
@@ -323,10 +358,8 @@ create-asset-vm-vmware-boot-ova: | $(OUTPUT_DIR) pull-talos-imager-container doe
 		-v $${to}:/secureboot:ro \
 		-v $${to}:/out \
 		-v $${image_cache_loc}:/image-cache.oci:ro \
-		-v /dev:/dev \
-		--privileged \
 		$(TALOS_IMAGER_IMG) \
-		vmware --image-cache /image-cache.oci --image-disk-size=2GiB ;\
+		vmware --image-cache /image-cache.oci ;\
 		\mv -fv $${output_file} $${rename_file}									;\
 		echo "--> INFO: Created $$(readlink -f $${rename_file})"				;\
 	}
@@ -364,7 +397,7 @@ help:  ## Show the help menu
 		if [[ ! -f $(EDAADM) ]]; then														 \
 			downloaded_tool_message="($(EDAADM) isn't downloaded - run make download-tools)";\
 		else																				 \
-			downloaded_tool_message="Downloaded $$($(EDAADM) version)"						;\
+			downloaded_tool_message="Downloaded $$($(EDAADM) version | grep 'CLI')"			;\
 		fi																					;\
-		echo "ADM Version|Expected: $(EDAADM_VERSION), $${downloaded_tool_message}"					;\
+		echo "ADM Version|Expected: $(EDAADM_VERSION), $${downloaded_tool_message}"			;\
 	} | while IFS='|' read -r target desc; do printf '%-40s | %s\n' "$$target" "$$desc"; done

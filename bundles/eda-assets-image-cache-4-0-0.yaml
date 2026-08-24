@@ -1,0 +1,84 @@
+version: 4.0.0
+name: edaadm-asset-host-image-cache-4.0.0
+assets:
+    registries:
+        - name: ghcr.io
+          auth: null
+          images:
+            - name: nokia-eda/adm/ext/busybox
+              tags:
+                - 1.36.1
+            - name: nokia-eda/adm/ext/rancher/local-path-provisioner
+              tags:
+                - v0.0.30
+            - name: nokia-eda/adm/ext/registry
+              tags:
+                - 2.8.3
+            - name: nokia-eda/adm/gogs
+              tags:
+                - 0.13.0
+            - name: nokia-eda/adm/lighthttpd
+              tags:
+                - 1.4.76
+            - name: siderolabs/extensions
+              tags:
+                - v1.13.6
+            - name: siderolabs/flannel
+              tags:
+                - v0.28.5
+            - name: siderolabs/imager
+              tags:
+                - v1.13.6
+            - name: siderolabs/installer-base
+              tags:
+                - v1.13.6
+            - name: siderolabs/installer
+              tags:
+                - v1.13.6
+            - name: siderolabs/kubelet
+              tags:
+                - v1.36.2
+            - name: siderolabs/overlays
+              tags:
+                - v1.13.6
+            - name: siderolabs/talos
+              tags:
+                - v1.13.6
+            - name: siderolabs/talosctl-all
+              tags:
+                - v1.13.6
+        - name: registry.k8s.io
+          auth: null
+          images:
+            - name: coredns/coredns
+              tags:
+                - v1.14.2
+            - name: etcd
+              tags:
+                - v3.6.12
+            - name: ingress-nginx/controller
+              tags:
+                - v1.12.1
+            - name: ingress-nginx/kube-webhook-certgen
+              tags:
+                - v1.5.2
+            - name: kube-apiserver
+              tags:
+                - v1.36.2
+            - name: kube-controller-manager
+              tags:
+                - v1.36.2
+            - name: kube-proxy
+              tags:
+                - v1.36.2
+            - name: kube-scheduler
+              tags:
+                - v1.36.2
+            - name: networking/kube-network-policies
+              tags:
+                - v1.0.0
+            - name: pause
+              tags:
+                - 3.10.1
+    repos: []
+    artifacts: []

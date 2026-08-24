@@ -35,14 +35,14 @@ ASSET_HOST_HTTP_PORT ?= 80
 ASSET_HOST_HTTPS_PORT ?= 443
 
 ## Tool Versions:
-KPT_VERSION ?= v1.0.0-beta.57
-KUBECTL_VERSION ?= v1.34.1
+KPT_VERSION ?= v1.0.0-beta.64
+KUBECTL_VERSION ?= v1.36.2
 
 ## Tools:
 KPT ?= $(TOOLS)/kpt-$(KPT_VERSION)
 KUBECTL ?= $(TOOLS)/kubectl-$(KUBECTL_VERSION)
 
-APPLY_SETTER_IMG=ghcr.io/srl-labs/kpt-apply-setters:0.1.1
+APPLY_SETTER_IMG=ghcr.io/nokia-eda/ext/kptdev/krm-functions-catalog/apply-setters:v0.2
 KUBECTL_SRC ?= https://dl.k8s.io/release/$(KUBECTL_VERSION)/bin/$(OS)/$(ARCH)/kubectl
 KPT_SRC ?= https://github.com/GoogleContainerTools/kpt/releases/download/$(KPT_VERSION)/kpt_$(OS)_$(ARCH)
 
@@ -108,7 +108,7 @@ endef
 ##@ Download tools
 
 .PHONY: download-tools
-download-tools: | $(TOOLS) $(KPT) $(KUBECTL)
+download-tools: | $(TOOLS) $(KPT) $(KUBECTL) ## Download the tools to initialize the eda-shipyard
 
 $(TOOLS): | $(BASE)
 	mkdir -p $(TOOLS)
