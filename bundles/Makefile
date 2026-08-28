@@ -65,11 +65,11 @@ ifdef EDA_CORE_REL
 $(error "[ERROR] Please use EDA_CORE_VERSION instead")
 endif
 
-EDA_CORE_VERSION ?= 26.4.3
+EDA_CORE_VERSION ?= 26.8.1
 EDA_CORE_MAJOR := $(word 1,$(subst ., ,$(EDA_CORE_VERSION)))
 EDA_CORE_MINOR := $(word 2,$(subst ., ,$(EDA_CORE_VERSION)))
 
-EDA_APPS_VERSION ?= 26.4.3
+EDA_APPS_VERSION ?= 26.8.1
 
 # The user did not provide a K8S_VERSION, based on the EDA_CORE_VERSION we will set it to the appropriate version
 ifndef K8S_VERSION
@@ -94,10 +94,10 @@ ASSET_HOST_ARITFACTS_SCHEME ?= $(ASSET_HOST_ARTIFACTS_SCHEME)
 # The _BUNDLES variables are lists of the names of the bundle files without the yaml extension
 ALL_BUNDLES := $(basename $(notdir $(wildcard $(TOP_DIR)/*.yaml)))
 
-CONNECT_BUNDLES := $(basename $(notdir $(wildcard $(TOP_DIR)/eda-bundle-connect-*.yaml)))
+CONNECT_BUNDLES := $(basename $(notdir $(wildcard $(TOP_DIR)/eda-bundle-connect-*.yaml $(TOP_DIR)/eda-bundle-k8s-client-provider-*.yaml $(TOP_DIR)/eda-bundle-openstack-client-provider-*.yaml)))
 EXPORTER_BUNDLES := $(basename $(notdir $(wildcard $(TOP_DIR)/eda-bundle*-exporter-*.yaml $(TOP_DIR)/eda-bundle*-write-*.yaml $(TOP_DIR)/eda-bundle-snmp-traps-*.yaml $(TOP_DIR)/eda-bundle-netbox-*.yaml)))
 IMPORTER_BUNDLES := $(basename $(notdir $(wildcard $(TOP_DIR)/eda-bundle*-importer-*.yaml)))
-NOTIFICATION_BUNDLES := $(basename $(notdir $(wildcard $(TOP_DIR)/eda-bundle*-notifier-*.yaml $(TOP_DIR)/eda-bundle-pager-duty-*.yaml $(TOP_DIR)/eda-bundle-service-now-*.yaml)))
+NOTIFICATION_BUNDLES := $(basename $(notdir $(wildcard $(TOP_DIR)/eda-bundle*-notifier-*.yaml $(TOP_DIR)/eda-bundle-pagers*.yaml $(TOP_DIR)/eda-bundle-pager-duty-*.yaml $(TOP_DIR)/eda-bundle-service-now-*.yaml $(TOP_DIR)/eda-bundle-snow*.yaml)))
 SIM_BUNDLES := $(basename $(notdir $(wildcard $(TOP_DIR)/eda-bundle-sim-*.yaml)))
 USER_BUNDLES := $(basename $(notdir $(wildcard $(USER_BUNDLES_DIR)/*.yaml)))
 
