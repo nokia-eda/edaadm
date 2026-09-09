@@ -65,11 +65,11 @@ ifdef EDA_CORE_REL
 $(error "[ERROR] Please use EDA_CORE_VERSION instead")
 endif
 
-EDA_CORE_VERSION ?= 26.8.1
+EDA_CORE_VERSION ?= 26.8.2
 EDA_CORE_MAJOR := $(word 1,$(subst ., ,$(EDA_CORE_VERSION)))
 EDA_CORE_MINOR := $(word 2,$(subst ., ,$(EDA_CORE_VERSION)))
 
-EDA_APPS_VERSION ?= 26.8.1
+EDA_APPS_VERSION ?= 26.8.2
 
 # The user did not provide a K8S_VERSION, based on the EDA_CORE_VERSION we will set it to the appropriate version
 ifndef K8S_VERSION
