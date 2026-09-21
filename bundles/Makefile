@@ -28,7 +28,7 @@ UNAME := $(shell uname)
 # Lowercase - sane version
 OS := $(shell echo "$(UNAME)" | tr '[:upper:]' '[:lower:]')
 
-EDAADM_VERSION ?= v4.0.0
+EDAADM_VERSION ?= v4.1.0
 EDAADM_SRC ?= https://github.com/nokia-eda/edaadm/releases/download/$(EDAADM_VERSION)/edaadm-$(OS)-$(ARCH)
 
 # Number of workers to use in bundle save operations (half of online CPUs, nproc/2)
