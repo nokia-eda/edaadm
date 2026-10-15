@@ -1,4 +1,12 @@
 # Source: docker-registry/templates/ingress.yaml
+# Anonymous pulls and authenticated writes are enforced by the registry
+# sidecar, not by this Ingress. ingress-nginx auth-type emits one auth_basic
+# for the whole location. Exempting GET and HEAD needs a second auth_basic in
+# that same location, and nginx rejects the duplicate ("auth_basic" directive
+# is duplicate) and refuses to load the server config, so every route 404s.
+# limit_except can hold the second auth_basic, but the configuration-snippet
+# is inserted before proxy_pass, so that nested block never inherits the
+# ingress upstream.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

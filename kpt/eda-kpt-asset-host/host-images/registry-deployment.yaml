@@ -55,6 +55,33 @@ spec:
               mountPath: "/etc/docker/registry"
             - name: data
               mountPath: /var/lib/registry/
+        # Same nginx build as the asset-host ingress controller, so this
+        # prototype does not need another image in the airgap cache.
+        - name: registry-auth-proxy
+          image: registry.k8s.io/ingress-nginx/controller:v1.12.1
+          imagePullPolicy: IfNotPresent
+          command:
+            - nginx
+            - -g
+            - daemon off;
+          ports:
+            - name: auth-proxy
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /v2/
+              port: auth-proxy
+          livenessProbe:
+            httpGet:
+              path: /v2/
+              port: auth-proxy
+          volumeMounts:
+            - name: registry-auth-proxy-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: registry-auth
+              mountPath: /auth
+              readOnly: true
       volumes:
         - name: registry-docker-registry-config
           configMap:
@@ -62,3 +89,12 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: registry-docker-registry
+        - name: registry-auth-proxy-config
+          configMap:
+            name: registry-auth-proxy
+        - name: registry-auth
+          secret:
+            secretName: registry-ingress-auth
+            items:
+              - key: auth
+                path: htpasswd

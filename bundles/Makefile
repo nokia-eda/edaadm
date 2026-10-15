@@ -84,8 +84,8 @@ endif
 
 EDA_ASSETS_IMAGE_CACHE ?= $(TOP_DIR)/eda-assets-image-cache-4-0-0.yaml
 
-B64_ASSET_HOST_REGISTRY_USERNAME ?= ""
-B64_ASSET_HOST_REGISTRY_PASSWORD ?= ""
+B64_ASSET_HOST_REGISTRY_USERNAME ?= $(B64_ASSET_HOST_ARTIFACTS_USERNAME)
+B64_ASSET_HOST_REGISTRY_PASSWORD ?= $(B64_ASSET_HOST_ARTIFACTS_PASSWORD)
 ASSET_HOST_GIT_SCHEME ?= https
 ASSET_HOST_ARTIFACTS_SCHEME ?= https
 # Maintain backwards compatibility for old variable that has a typo
@@ -384,6 +384,8 @@ endif
 	@$(call check-if-var-is-defined,B64_ASSET_HOST_GIT_PASSWORD)
 	@$(call check-if-var-is-defined,B64_ASSET_HOST_ARTIFACTS_USERNAME)
 	@$(call check-if-var-is-defined,B64_ASSET_HOST_ARTIFACTS_PASSWORD)
+	@$(call check-if-var-is-defined,B64_ASSET_HOST_REGISTRY_USERNAME)
+	@$(call check-if-var-is-defined,B64_ASSET_HOST_REGISTRY_PASSWORD)
 
 # This target first gets the help entries for targets that are defined in the Makefile and sorts them
 # Then it gets the help entries for the generated bulk targets which are stored in the HELP_ENTRIES variable

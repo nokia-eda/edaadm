@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: registry-auth-proxy
+  namespace: "eda-assets" # kpt-set: ${EDA_NAMESPACE_ASSET_HOST}
+  labels:
+    app: docker-registry
+data:
+  nginx.conf: |
+    worker_processes 1;
+    error_log stderr warn;
+    pid /tmp/nginx.pid;
+
+    events {
+      worker_connections 1024;
+    }
+
+    http {
+      include /etc/nginx/mime.types;
+      default_type application/octet-stream;
+      access_log /dev/stdout;
+      client_max_body_size 0;
+      client_body_temp_path /tmp/client_body;
+      proxy_temp_path /tmp/proxy_temp;
+
+      server {
+        listen 8080;
+
+        location / {
+          proxy_pass http://127.0.0.1:5000;
+          proxy_http_version 1.1;
+          proxy_set_header Host $http_host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+          proxy_read_timeout 900s;
+          proxy_send_timeout 900s;
+        }
+
+        # proxy_* is parsed before limit_except so write requests inherit the
+        # upstream. GET and HEAD stay anonymous. Other methods use
+        # registry-ingress-auth. This lives in the sidecar because an
+        # Ingress cannot: auth-type already emits auth_basic, and a second
+        # auth_basic in that location makes nginx reject the whole server.
+        location /v2 {
+          proxy_pass http://127.0.0.1:5000;
+          proxy_http_version 1.1;
+          proxy_set_header Host $http_host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+          proxy_request_buffering off;
+          proxy_read_timeout 900s;
+          proxy_send_timeout 900s;
+
+          limit_except GET HEAD {
+            auth_basic "Registry";
+            auth_basic_user_file /auth/htpasswd;
+          }
+        }
+      }
+    }

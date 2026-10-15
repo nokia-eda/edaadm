@@ -12,6 +12,6 @@ spec:
     - port: 5000
       protocol: TCP
       name: http-5000
-      targetPort: 5000
+      targetPort: 8080
   selector:
     app: docker-registry
